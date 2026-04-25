@@ -1,2 +1,241 @@
-<h1>Myanmar Rate</h1>
-<p>Coming Soon</p>
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Myanmar Rate</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:#0b0b0b;
+color:#fff;
+}
+
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:18px 30px;
+background:#111;
+border-bottom:1px solid #222;
+position:sticky;
+top:0;
+}
+
+.logo{
+font-size:28px;
+font-weight:bold;
+color:#d4af37;
+}
+
+nav a{
+color:#fff;
+text-decoration:none;
+margin-left:18px;
+font-size:14px;
+}
+
+.hero{
+text-align:center;
+padding:80px 20px;
+background:linear-gradient(180deg,#111,#0b0b0b);
+}
+
+.hero h1{
+font-size:42px;
+color:#d4af37;
+margin-bottom:18px;
+}
+
+.hero p{
+font-size:18px;
+color:#bbb;
+max-width:700px;
+margin:auto;
+line-height:1.6;
+}
+
+.btn{
+display:inline-block;
+margin-top:25px;
+padding:14px 28px;
+background:#d4af37;
+color:#000;
+text-decoration:none;
+font-weight:bold;
+border-radius:8px;
+}
+
+.section{
+max-width:1200px;
+margin:auto;
+padding:60px 20px;
+}
+
+.title{
+text-align:center;
+font-size:32px;
+color:#d4af37;
+margin-bottom:30px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+
+.card{
+background:#141414;
+padding:25px;
+border-radius:12px;
+border:1px solid #222;
+text-align:center;
+}
+
+.card h3{
+margin-bottom:10px;
+color:#d4af37;
+}
+
+.rate{
+font-size:34px;
+font-weight:bold;
+}
+
+.green{
+color:#00d26a;
+}
+
+.red{
+color:#ff5b5b;
+}
+
+input{
+width:100%;
+padding:12px;
+margin-top:10px;
+background:#0d0d0d;
+border:1px solid #333;
+color:#fff;
+border-radius:6px;
+}
+
+button{
+width:100%;
+padding:12px;
+margin-top:12px;
+background:#d4af37;
+border:none;
+font-weight:bold;
+cursor:pointer;
+border-radius:6px;
+}
+
+footer{
+text-align:center;
+padding:35px;
+color:#666;
+border-top:1px solid #222;
+margin-top:50px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="logo">🛕 Myanmar Rate</div>
+
+<nav>
+<a href="#">Home</a>
+<a href="#">Rates</a>
+<a href="#">Tools</a>
+<a href="#">Ads</a>
+<a href="#">Contact</a>
+</nav>
+</header>
+
+<section class="hero">
+<h1>实时汇率 · 精准计算 · 助力生意</h1>
+
+<p>
+缅甸领先的智能汇率与贸易工具平台。
+实时查看人民币、美元、泰铢行情，
+帮助商人赚更多的钱。
+</p>
+
+<a href="#" class="btn">立即开始</a>
+</section>
+
+<section class="section">
+<h2 class="title">今日汇率</h2>
+
+<div class="grid">
+
+<div class="card">
+<h3>人民币 RMB</h3>
+<div class="rate">610</div>
+<p class="green">▲ +5</p>
+</div>
+
+<div class="card">
+<h3>美元 USD</h3>
+<div class="rate">4210</div>
+<p class="red">▼ -15</p>
+</div>
+
+<div class="card">
+<h3>泰铢 THB</h3>
+<div class="rate">115</div>
+<p class="green">▲ +1</p>
+</div>
+
+</div>
+</section>
+
+<section class="section">
+<h2 class="title">汇率换算器</h2>
+
+<div class="card">
+<input placeholder="输入人民币金额">
+<button>立即换算</button>
+</div>
+</section>
+
+<section class="section">
+<h2 class="title">黄金广告位</h2>
+
+<div class="grid">
+
+<div class="card">
+<h3>汇款公司</h3>
+<p>中国 → 缅甸 快速到账</p>
+</div>
+
+<div class="card">
+<h3>物流公司</h3>
+<p>昆明直达曼德勒</p>
+</div>
+
+<div class="card">
+<h3>手机批发</h3>
+<p>全缅最低价供应</p>
+</div>
+
+</div>
+</section>
+
+<footer>
+© 2026 Myanmar Rate | Smart Exchange Platform
+</footer>
+
+</body>
+</html>
