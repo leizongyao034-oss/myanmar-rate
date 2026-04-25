@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Myanmar Rate V1.2</title>
+<title>Myanmar Rate V2.0</title>
 
 <style>
 *{
@@ -14,22 +14,18 @@ font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-background:#090909;
+background:#0b0b0b;
 color:#fff;
-line-height:1.6;
 }
 
 header{
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:18px 28px;
+padding:18px 25px;
 background:#111;
 border-bottom:1px solid #222;
 flex-wrap:wrap;
-position:sticky;
-top:0;
-z-index:100;
 }
 
 .logo{
@@ -41,8 +37,9 @@ color:#d4af37;
 nav a{
 color:#fff;
 text-decoration:none;
-margin-left:16px;
+margin-left:15px;
 font-size:14px;
+cursor:pointer;
 }
 
 nav a:hover{
@@ -59,76 +56,32 @@ cursor:pointer;
 border-radius:6px;
 }
 
-.hero{
-text-align:center;
-padding:90px 20px;
-background:linear-gradient(180deg,#111,#090909);
-}
-
-.hero h1{
-font-size:44px;
-color:#d4af37;
-margin-bottom:18px;
-}
-
-.hero p{
-max-width:760px;
+section{
+max-width:1000px;
 margin:auto;
+padding:60px 20px;
+}
+
+h1{
+text-align:center;
+font-size:42px;
+color:#d4af37;
+margin-bottom:15px;
+}
+
+p{
+text-align:center;
 color:#bbb;
-font-size:18px;
-}
-
-.hero-btn{
-display:inline-block;
-margin-top:26px;
-padding:14px 28px;
-background:#d4af37;
-color:#000;
-text-decoration:none;
-font-weight:bold;
-border-radius:8px;
-}
-
-.section{
-max-width:1200px;
-margin:auto;
-padding:65px 20px;
-}
-
-.title{
-text-align:center;
-font-size:32px;
-color:#d4af37;
 margin-bottom:35px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:22px;
 }
 
 .card{
 background:#141414;
-padding:26px;
+padding:25px;
+border-radius:12px;
 border:1px solid #222;
-border-radius:14px;
-text-align:center;
+margin-bottom:20px;
 }
-
-.card h3{
-color:#d4af37;
-margin-bottom:10px;
-}
-
-.rate{
-font-size:34px;
-font-weight:bold;
-margin-bottom:10px;
-}
-
-.green{color:#00d26a;}
-.red{color:#ff5b5b;}
 
 input{
 width:100%;
@@ -140,16 +93,16 @@ color:#fff;
 border-radius:8px;
 }
 
-button{
+button.action{
 width:100%;
 padding:12px;
 margin-top:12px;
 background:#d4af37;
 border:none;
 font-weight:bold;
-color:#000;
 cursor:pointer;
 border-radius:8px;
+color:#000;
 }
 
 .result{
@@ -157,40 +110,66 @@ margin-top:15px;
 font-size:24px;
 color:#d4af37;
 font-weight:bold;
-}
-
-.placeholder{
-padding:35px;
-border:2px dashed #444;
-border-radius:14px;
 text-align:center;
-color:#999;
-background:#111;
 }
 
-.feature{
-text-align:left;
+.quick{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:18px;
 }
 
-.feature li{
-margin:10px 0;
-color:#ccc;
+.box{
+background:#141414;
+padding:20px;
+border-radius:12px;
+text-align:center;
+border:1px solid #222;
 }
 
 footer{
 text-align:center;
-padding:35px;
+padding:30px;
 color:#666;
 border-top:1px solid #222;
-margin-top:50px;
+margin-top:40px;
 }
 </style>
 
 <script>
-function convertRMB(){
-let rmb=parseFloat(document.getElementById("rmb").value||0);
-let result=rmb*610;
-document.getElementById("output").innerHTML=result.toLocaleString()+" MMK";
+let lang="zh";
+
+function convert(){
+let val=parseFloat(document.getElementById("rmb").value||0);
+let result=val*610;
+document.getElementById("result").innerHTML=result.toLocaleString()+" MMK";
+}
+
+function goTop(){
+window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function contact(){
+window.location.href="mailto:your@email.com";
+}
+
+function setLang(type){
+lang=type;
+
+if(type==="zh"){
+document.getElementById("title").innerHTML="实时汇率 · 精准计算 · 助力生意";
+document.getElementById("desc").innerHTML="缅甸领先的智能汇率平台";
+}
+
+if(type==="en"){
+document.getElementById("title").innerHTML="Live Rates · Smart Tools · Grow Business";
+document.getElementById("desc").innerHTML="Myanmar Smart Exchange Platform";
+}
+
+if(type==="mm"){
+document.getElementById("title").innerHTML="ငွေလဲနှုန်း တိုက်ရိုက် · စီးပွားရေးအကူအညီ";
+document.getElementById("desc").innerHTML="မြန်မာနိုင်ငံ ငွေလဲပလက်ဖောင်း";
+}
 }
 </script>
 
@@ -202,137 +181,62 @@ document.getElementById("output").innerHTML=result.toLocaleString()+" MMK";
 <div class="logo">🛕 Myanmar Rate</div>
 
 <nav>
-<a href="#">Home</a>
-<a href="#">Rates</a>
-<a href="#">Tools</a>
-<a href="#">Market</a>
-<a href="#">Ads</a>
-<a href="#">About</a>
+<a onclick="goTop()">Home</a>
+<a onclick="goTop()">Rates</a>
+<a onclick="goTop()">Tools</a>
+<a onclick="contact()">Contact</a>
 </nav>
 
 <div class="lang">
-<button>中文</button>
-<button>EN</button>
-<button>မြန်မာ</button>
+<button onclick="setLang('zh')">中文</button>
+<button onclick="setLang('en')">EN</button>
+<button onclick="setLang('mm')">မြန်မာ</button>
 </div>
 </header>
 
-<section class="hero">
-<h1>实时汇率 · 精准计算 · 助力生意</h1>
-<p>
-缅甸领先的智能汇率与贸易平台。帮助商人、采购者、投资者快速掌握人民币、美元、泰铢市场动态。
-</p>
-<a href="#" class="hero-btn">立即开始</a>
-</section>
+<section>
 
-<section class="section">
-<h2 class="title">今日汇率</h2>
+<h1 id="title">实时汇率 · 精准计算 · 助力生意</h1>
+<p id="desc">缅甸领先的智能汇率平台</p>
 
-<div class="grid">
+<div class="quick">
+
+<div class="box">
+<h3>RMB</h3>
+<p>610 MMK</p>
+</div>
+
+<div class="box">
+<h3>USD</h3>
+<p>4210 MMK</p>
+</div>
+
+<div class="box">
+<h3>THB</h3>
+<p>115 MMK</p>
+</div>
+
+</div>
 
 <div class="card">
-<h3>人民币 RMB</h3>
-<div class="rate">610</div>
-<p class="green">▲ +5 Today</p>
+<h2>人民币换算器</h2>
+
+<input type="number" id="rmb" placeholder="输入人民币金额">
+
+<button class="action" onclick="convert()">立即换算</button>
+
+<div class="result" id="result">0 MMK</div>
 </div>
 
 <div class="card">
-<h3>美元 USD</h3>
-<div class="rate">4210</div>
-<p class="red">▼ -12 Today</p>
+<h2>商务合作</h2>
+<button class="action" onclick="contact()">联系广告合作</button>
 </div>
 
-<div class="card">
-<h3>泰铢 THB</h3>
-<div class="rate">115</div>
-<p class="green">▲ +1 Today</p>
-</div>
-
-</div>
-</section>
-
-<section class="section">
-<h2 class="title">人民币换算器</h2>
-
-<div class="card">
-<input type="number" id="rmb" placeholder="输入人民币金额 RMB">
-<button onclick="convertRMB()">立即换算</button>
-<div class="result" id="output">0 MMK</div>
-</div>
-</section>
-
-<section class="section">
-<h2 class="title">为什么选择 Myanmar Rate</h2>
-
-<div class="grid">
-
-<div class="card feature">
-<h3>实时市场价格</h3>
-<ul>
-<li>每日更新</li>
-<li>适合贸易用户</li>
-<li>快速查看趋势</li>
-</ul>
-</div>
-
-<div class="card feature">
-<h3>专业工具</h3>
-<ul>
-<li>换算器</li>
-<li>利润计算</li>
-<li>成本分析</li>
-</ul>
-</div>
-
-<div class="card feature">
-<h3>多语言支持</h3>
-<ul>
-<li>中文</li>
-<li>English</li>
-<li>မြန်မာ</li>
-</ul>
-</div>
-
-</div>
-</section>
-
-<section class="section">
-<h2 class="title">黄金广告位</h2>
-
-<div class="grid">
-
-<div class="placeholder">
-Premium Banner Space<br><br>
-Available Soon
-</div>
-
-<div class="placeholder">
-Top Sponsor Slot<br><br>
-Available Soon
-</div>
-
-<div class="placeholder">
-Business Promotion Space<br><br>
-Available Soon
-</div>
-
-</div>
-</section>
-
-<section class="section">
-<h2 class="title">联系我们</h2>
-
-<div class="grid">
-
-<div class="placeholder">Telegram - Coming Soon</div>
-<div class="placeholder">Facebook - Coming Soon</div>
-<div class="placeholder">WhatsApp - Coming Soon</div>
-
-</div>
 </section>
 
 <footer>
-© 2026 Myanmar Rate V1.2 | Smart Exchange Platform
+© 2026 Myanmar Rate V2.0
 </footer>
 
 </body>
