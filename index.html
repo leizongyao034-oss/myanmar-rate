@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Myanmar Rate V3</title>
+<title>Myanmar Rate V4</title>
 <style>
   :root{
     --bg:#090909;
@@ -46,7 +46,7 @@
   .lang{
     display:flex;gap:8px;flex-wrap:wrap
   }
-  .lang button,.ghost-btn,.primary-btn,.small-btn{
+  .lang button,.ghost-btn,.primary-btn,.btn,.small-btn{
     border:1px solid var(--gold);
     background:#111;color:var(--gold);
     padding:9px 12px;border-radius:10px;
@@ -77,7 +77,15 @@
   .ghost-btn{
     background:transparent;color:var(--text)
   }
-
+  .notice{
+    max-width:1200px;margin:0 auto 10px;padding:0 20px;
+  }
+  .ticker{
+    border:1px solid #333;background:#101010;
+    padding:12px 14px;border-radius:12px;
+    color:#ddd;overflow:hidden
+  }
+  .ticker strong{color:var(--gold)}
   .section{
     max-width:1200px;margin:auto;
     padding:26px 20px 0;
@@ -89,7 +97,6 @@
   .sub{
     text-align:center;color:var(--muted);margin-top:-10px;margin-bottom:22px
   }
-
   .grid{
     display:grid;gap:18px;
     grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
@@ -112,12 +119,13 @@
     display:grid;gap:14px;
     grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
   }
-  input,select{
+  input,select,textarea{
     width:100%;margin-top:10px;
     background:#0d0d0d;color:#fff;
     border:1px solid #333;border-radius:10px;
     padding:12px 12px;font-size:15px;
   }
+  textarea{min-height:88px;resize:vertical}
   .btn{
     width:100%;margin-top:12px;
     background:var(--gold);color:#000;border:none;
@@ -170,6 +178,33 @@
     padding:7px 12px;margin:6px 6px 0 0;color:#ddd;background:#101010
   }
   .stack{display:flex;flex-wrap:wrap;justify-content:center;margin-top:8px}
+  .admin-toggle{
+    text-align:center;margin-top:10px
+  }
+  .admin-panel{
+    display:none;
+    margin-top:18px;
+    border:1px solid #333;
+    border-radius:16px;
+    background:#0f0f0f;
+    padding:18px;
+  }
+  .admin-panel.show{display:block}
+  .badge{
+    display:inline-block;
+    padding:6px 10px;
+    border:1px solid #333;
+    border-radius:999px;
+    background:#101010;
+    color:#ddd;
+    margin-right:8px;
+    margin-top:8px;
+  }
+  .small-note{
+    color:var(--muted);
+    font-size:13px;
+    margin-top:8px;
+  }
 </style>
 </head>
 <body>
@@ -205,6 +240,13 @@
     <span class="pill">Multi-language</span>
   </div>
 </section>
+
+<div class="notice">
+  <div class="ticker">
+    <strong id="tickerLabel">公告：</strong>
+    <span id="tickerText">Myanmar Rate V4 正式运行中。广告位和联系方式先保留为空，后续可直接替换。</span>
+  </div>
+</div>
 
 <section class="section" id="rates">
   <h2 id="ratesTitle">今日汇率</h2>
@@ -315,6 +357,43 @@
       <div class="mini">Best for logistics / remittance</div>
     </div>
   </div>
+
+  <div class="admin-toggle">
+    <button class="small-btn" onclick="toggleAdmin()">Open Admin Panel</button>
+  </div>
+
+  <div class="admin-panel" id="adminPanel">
+    <h3 style="color:var(--gold);margin-bottom:10px">Admin Panel</h3>
+    <div class="row">
+      <div>
+        <label class="muted">Admin Password</label>
+        <input type="password" id="adminPass" placeholder="Enter password">
+      </div>
+      <div style="display:flex;align-items:end">
+        <button class="btn" onclick="unlockAdmin()">Unlock</button>
+      </div>
+    </div>
+
+    <div id="adminContent" style="display:none;margin-top:16px">
+      <div class="row">
+        <div>
+          <label class="muted">公告内容</label>
+          <textarea id="noticeInput">Myanmar Rate V4 正式运行中。广告位和联系方式先保留为空，后续可直接替换。</textarea>
+          <button class="btn" onclick="saveNotice()">保存公告</button>
+        </div>
+        <div>
+          <label class="muted">广告位 1</label>
+          <input type="text" id="ad1Input" placeholder="广告位1内容">
+          <label class="muted">广告位 2</label>
+          <input type="text" id="ad2Input" placeholder="广告位2内容">
+          <label class="muted">广告位 3</label>
+          <input type="text" id="ad3Input" placeholder="广告位3内容">
+          <button class="btn" onclick="saveAds()">保存广告位</button>
+        </div>
+      </div>
+      <div class="small-note">提示：这版是前端管理面板，后面可接 Supabase 做真正后台登录。</div>
+    </div>
+  </div>
 </section>
 
 <section class="section" id="contact">
@@ -329,7 +408,8 @@
 </section>
 
 <div class="footer">
-  <div id="footerText">© 2026 Myanmar Rate V3 | Smart Exchange Platform</div>
+  <div id="footerText">© 2026 Myanmar Rate V4 | Smart Exchange Platform</div>
+  <div class="small-note" id="visitorText">Visitors: 0</div>
 </div>
 
 <script>
@@ -348,6 +428,8 @@
       heroDesc: "缅甸智能汇率与贸易工具平台。查看市场价格、快速换算、计算利润，让商人更快做决定。",
       heroBtn1: "立即查看汇率",
       heroBtn2: "商务合作",
+      tickerLabel: "公告：",
+      tickerText: "Myanmar Rate V4 正式运行中。广告位和联系方式先保留为空，后续可直接替换。",
       ratesTitle: "今日汇率",
       ratesSub: "可手动修改并保存到本地，后续可接入真实 API。",
       editRatesTitle: "手动更新汇率",
@@ -371,7 +453,7 @@
       adsSub: "先保留位置，后面有广告主可以直接替换。",
       contactTitle: "联系我们",
       contactSub: "联系方式先留空，后续可接 Telegram / Facebook / WhatsApp。",
-      footerText: "© 2026 Myanmar Rate V3 | Smart Exchange Platform",
+      footerText: "© 2026 Myanmar Rate V4 | Smart Exchange Platform",
       options: ["RMB", "USD", "THB"]
     },
     en: {
@@ -385,6 +467,8 @@
       heroDesc: "Myanmar exchange and trade tools platform. Check market prices, convert quickly, and calculate profit faster.",
       heroBtn1: "View Rates",
       heroBtn2: "Business",
+      tickerLabel: "Notice:",
+      tickerText: "Myanmar Rate V4 is live. Ad slots and contact links are kept blank for now and can be replaced later.",
       ratesTitle: "Today’s Rates",
       ratesSub: "You can edit and save rates locally. API integration can be added later.",
       editRatesTitle: "Manual Rate Update",
@@ -408,7 +492,7 @@
       adsSub: "Keep the slots ready and replace them when advertisers arrive.",
       contactTitle: "Contact Us",
       contactSub: "Contact methods are left blank for now; Telegram / Facebook / WhatsApp can be added later.",
-      footerText: "© 2026 Myanmar Rate V3 | Smart Exchange Platform",
+      footerText: "© 2026 Myanmar Rate V4 | Smart Exchange Platform",
       options: ["RMB", "USD", "THB"]
     },
     mm: {
@@ -422,6 +506,8 @@
       heroDesc: "မြန်မာနိုင်ငံ၏ ငွေလဲနှုန်းနှင့် ကုန်သွယ်ရေး ကိရိယာ ပလက်ဖောင်း။ စျေးနှုန်းကြည့်၊ တွက်ချက်၊ အမြတ်တွက်ပြီး မြန်မြန်ဆုံးဖြတ်နိုင်သည်။",
       heroBtn1: "နှုန်းကြည့်မည်",
       heroBtn2: "လုပ်ငန်းဆက်သွယ်",
+      tickerLabel: "ကြေညာချက်：",
+      tickerText: "Myanmar Rate V4 လုပ်ဆောင်နေပါသည်။ ကြော်ငြာနှင့် ဆက်သွယ်ရေးနေရာများကို ယခုလောလောဆယ် မဖြည့်သေးပါ။",
       ratesTitle: "ယနေ့ ငွေလဲနှုန်း",
       ratesSub: "လက်ရှိတန်ဖိုးကို လက်ဖြင့်ပြင်နိုင်ပြီး သိမ်းထားနိုင်သည်။ နောက်ပိုင်း API ချိတ်နိုင်သည်။",
       editRatesTitle: "လက်ဖြင့် နှုန်းပြင်ရန်",
@@ -445,7 +531,7 @@
       adsSub: "အခုတော့ နေရာသိမ်းထားပြီး နောက်မှကြော်ငြာထည့်နိုင်သည်။",
       contactTitle: "ဆက်သွယ်ရန်",
       contactSub: "Telegram / Facebook / WhatsApp ကို နောက်ပိုင်းထည့်နိုင်ရန် အခုလွတ်ထားသည်။",
-      footerText: "© 2026 Myanmar Rate V3 | Smart Exchange Platform",
+      footerText: "© 2026 Myanmar Rate V4 | Smart Exchange Platform",
       options: ["RMB", "USD", "THB"]
     }
   };
@@ -459,18 +545,10 @@
     }
   }
 
-  function saveRatesToStorage(){
-    localStorage.setItem("myanmarRateRates", JSON.stringify(rates));
-  }
-
-  function formatNumber(n){
-    return Number(n).toLocaleString();
-  }
-
   function syncRatesUI(){
-    document.getElementById("rmbRate").textContent = formatNumber(rates.RMB);
-    document.getElementById("usdRate").textContent = formatNumber(rates.USD);
-    document.getElementById("thbRate").textContent = formatNumber(rates.THB);
+    document.getElementById("rmbRate").textContent = Number(rates.RMB).toLocaleString();
+    document.getElementById("usdRate").textContent = Number(rates.USD).toLocaleString();
+    document.getElementById("thbRate").textContent = Number(rates.THB).toLocaleString();
     document.getElementById("inputRMB").value = rates.RMB;
     document.getElementById("inputUSD").value = rates.USD;
     document.getElementById("inputTHB").value = rates.THB;
@@ -487,18 +565,22 @@
     }
 
     rates = { RMB: rmb, USD: usd, THB: thb };
-    saveRatesToStorage();
+    localStorage.setItem("myanmarRateRates", JSON.stringify(rates));
+    const ts = new Date().toLocaleString();
+    localStorage.setItem("myanmarRateSavedAt", ts);
     syncRatesUI();
     document.getElementById("lastSaved").textContent =
-      getText("lastSavedPrefix") + new Date().toLocaleString();
+      getText("lastSavedPrefix") + ts;
   }
 
   function resetRates(){
     rates = {...defaultRates};
-    saveRatesToStorage();
+    localStorage.setItem("myanmarRateRates", JSON.stringify(rates));
+    const ts = new Date().toLocaleString();
+    localStorage.setItem("myanmarRateSavedAt", ts);
     syncRatesUI();
     document.getElementById("lastSaved").textContent =
-      getText("lastSavedPrefix") + new Date().toLocaleString();
+      getText("lastSavedPrefix") + ts;
   }
 
   function convert(){
@@ -506,7 +588,7 @@
     const currency = document.getElementById("currency").value;
     const mmk = amount * (rates[currency] || 0);
     document.getElementById("convertResult").textContent =
-      `${formatNumber(mmk)} MMK`;
+      `${Number(mmk).toLocaleString()} MMK`;
   }
 
   function calcProfit(){
@@ -521,11 +603,7 @@
 
     const status = profit >= 0 ? "Profit" : "Loss";
     document.getElementById("profitResult").textContent =
-      `${status}: ${formatNumber(Math.abs(profit))} MMK (${margin.toFixed(1)}%)`;
-  }
-
-  function contact(){
-    alert("Contact links are left blank for now. Replace them later with Telegram / Facebook / WhatsApp.");
+      `${status}: ${Math.abs(profit).toLocaleString()} MMK (${margin.toFixed(1)}%)`;
   }
 
   function getText(key){
@@ -540,8 +618,8 @@
     document.getElementById("btnMm").classList.toggle("active", lang === "mm");
 
     const t = texts[lang];
-
     document.documentElement.lang = lang === "mm" ? "my" : (lang === "en" ? "en" : "zh");
+
     document.getElementById("brandText").textContent = t.brand;
     document.getElementById("navHome").textContent = t.navHome;
     document.getElementById("navRates").textContent = t.navRates;
@@ -554,6 +632,9 @@
     document.getElementById("heroBtn1").textContent = t.heroBtn1;
     document.getElementById("heroBtn2").textContent = t.heroBtn2;
 
+    document.getElementById("tickerLabel").textContent = t.tickerLabel;
+    document.getElementById("tickerText").textContent = t.tickerText;
+
     document.getElementById("ratesTitle").textContent = t.ratesTitle;
     document.getElementById("ratesSub").textContent = t.ratesSub;
     document.getElementById("rmbTitle").textContent = t.options[0] + " RMB";
@@ -562,7 +643,9 @@
     document.getElementById("editRatesTitle").textContent = t.editRatesTitle;
     document.getElementById("saveRatesBtn").textContent = t.saveRatesBtn;
     document.getElementById("resetRatesBtn").textContent = t.resetRatesBtn;
-    document.getElementById("lastSaved").textContent = t.lastSavedPrefix + (document.getElementById("lastSaved").textContent.split("：")[1] || "—");
+
+    const savedAt = localStorage.getItem("myanmarRateSavedAt") || "—";
+    document.getElementById("lastSaved").textContent = t.lastSavedPrefix + savedAt;
 
     document.getElementById("toolsTitle").textContent = t.toolsTitle;
     document.getElementById("toolsSub").textContent = t.toolsSub;
@@ -587,30 +670,77 @@
     syncRatesUI();
   }
 
+  function toggleAdmin(){
+    const panel = document.getElementById("adminPanel");
+    panel.classList.toggle("show");
+  }
+
+  function unlockAdmin(){
+    const pass = document.getElementById("adminPass").value;
+    if(pass === "admin123"){
+      document.getElementById("adminContent").style.display = "block";
+      document.getElementById("ad1Input").value = document.getElementById("ad1").textContent;
+      document.getElementById("ad2Input").value = document.getElementById("ad2").textContent;
+      document.getElementById("ad3Input").value = document.getElementById("ad3").textContent;
+      document.getElementById("noticeInput").value = document.getElementById("tickerText").textContent;
+      alert("Admin unlocked.");
+    }else{
+      alert("Wrong password.");
+    }
+  }
+
+  function saveNotice(){
+    const text = document.getElementById("noticeInput").value.trim();
+    document.getElementById("tickerText").textContent = text || "—";
+    localStorage.setItem("myanmarRateNotice", text);
+    alert("Notice saved.");
+  }
+
+  function saveAds(){
+    document.getElementById("ad1").textContent = document.getElementById("ad1Input").value.trim() || "Available Soon";
+    document.getElementById("ad2").textContent = document.getElementById("ad2Input").value.trim() || "Available Soon";
+    document.getElementById("ad3").textContent = document.getElementById("ad3Input").value.trim() || "Available Soon";
+    localStorage.setItem("myanmarRateAd1", document.getElementById("ad1").textContent);
+    localStorage.setItem("myanmarRateAd2", document.getElementById("ad2").textContent);
+    localStorage.setItem("myanmarRateAd3", document.getElementById("ad3").textContent);
+    alert("Ads saved.");
+  }
+
+  function loadSavedText(){
+    const notice = localStorage.getItem("myanmarRateNotice");
+    if(notice) document.getElementById("tickerText").textContent = notice;
+
+    const ad1 = localStorage.getItem("myanmarRateAd1");
+    const ad2 = localStorage.getItem("myanmarRateAd2");
+    const ad3 = localStorage.getItem("myanmarRateAd3");
+
+    if(ad1) document.getElementById("ad1").textContent = ad1;
+    if(ad2) document.getElementById("ad2").textContent = ad2;
+    if(ad3) document.getElementById("ad3").textContent = ad3;
+  }
+
+  function trackVisitors(){
+    let count = parseInt(localStorage.getItem("myanmarRateVisitors") || "0", 10);
+    count += 1;
+    localStorage.setItem("myanmarRateVisitors", String(count));
+    document.getElementById("visitorText").textContent = "Visitors: " + count;
+  }
+
   window.addEventListener("load", () => {
+    trackVisitors();
+    loadSavedText();
     syncRatesUI();
+
     const lang = localStorage.getItem("myanmarRateLang") || "zh";
     setLang(lang);
-    document.getElementById("lastSaved").textContent =
-      getText("lastSavedPrefix") + (localStorage.getItem("myanmarRateSavedAt") || "—");
-  });
 
-  const originalSaveRates = saveRates;
-  saveRates = function(){
-    const rmb = parseFloat(document.getElementById("inputRMB").value || 0);
-    const usd = parseFloat(document.getElementById("inputUSD").value || 0);
-    const thb = parseFloat(document.getElementById("inputTHB").value || 0);
-    if(rmb <= 0 || usd <= 0 || thb <= 0){
-      alert("Please enter valid rates.");
-      return;
+    const savedAt = localStorage.getItem("myanmarRateSavedAt");
+    if(savedAt){
+      document.getElementById("lastSaved").textContent = getText("lastSavedPrefix") + savedAt;
+    }else{
+      document.getElementById("lastSaved").textContent = getText("lastSavedPrefix") + "—";
     }
-    rates = { RMB: rmb, USD: usd, THB: thb };
-    localStorage.setItem("myanmarRateRates", JSON.stringify(rates));
-    localStorage.setItem("myanmarRateSavedAt", new Date().toLocaleString());
-    syncRatesUI();
-    document.getElementById("lastSaved").textContent =
-      getText("lastSavedPrefix") + localStorage.getItem("myanmarRateSavedAt");
-  }
+  });
 </script>
 </body>
 </html>
