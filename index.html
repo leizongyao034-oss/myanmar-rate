@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Myanmar Rate V1.1</title>
+<title>Myanmar Rate V1.2</title>
 
 <style>
 *{
@@ -14,18 +14,22 @@ font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-background:#0b0b0b;
+background:#090909;
 color:#fff;
+line-height:1.6;
 }
 
 header{
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:18px 30px;
+padding:18px 28px;
 background:#111;
 border-bottom:1px solid #222;
 flex-wrap:wrap;
+position:sticky;
+top:0;
+z-index:100;
 }
 
 .logo{
@@ -37,8 +41,12 @@ color:#d4af37;
 nav a{
 color:#fff;
 text-decoration:none;
-margin-left:15px;
+margin-left:16px;
 font-size:14px;
+}
+
+nav a:hover{
+color:#d4af37;
 }
 
 .lang button{
@@ -48,63 +56,75 @@ background:#111;
 color:#d4af37;
 border:1px solid #d4af37;
 cursor:pointer;
+border-radius:6px;
 }
 
 .hero{
 text-align:center;
-padding:80px 20px;
-background:linear-gradient(180deg,#111,#0b0b0b);
+padding:90px 20px;
+background:linear-gradient(180deg,#111,#090909);
 }
 
 .hero h1{
-font-size:42px;
+font-size:44px;
 color:#d4af37;
-margin-bottom:15px;
+margin-bottom:18px;
 }
 
 .hero p{
+max-width:760px;
+margin:auto;
 color:#bbb;
 font-size:18px;
-max-width:700px;
-margin:auto;
-line-height:1.6;
+}
+
+.hero-btn{
+display:inline-block;
+margin-top:26px;
+padding:14px 28px;
+background:#d4af37;
+color:#000;
+text-decoration:none;
+font-weight:bold;
+border-radius:8px;
 }
 
 .section{
-max-width:1100px;
+max-width:1200px;
 margin:auto;
-padding:55px 20px;
+padding:65px 20px;
 }
 
 .title{
 text-align:center;
-font-size:30px;
+font-size:32px;
 color:#d4af37;
-margin-bottom:30px;
+margin-bottom:35px;
 }
 
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:22px;
 }
 
 .card{
 background:#141414;
-padding:25px;
-border-radius:12px;
+padding:26px;
 border:1px solid #222;
+border-radius:14px;
 text-align:center;
 }
 
 .card h3{
-margin-bottom:12px;
 color:#d4af37;
+margin-bottom:10px;
 }
 
 .rate{
 font-size:34px;
 font-weight:bold;
+margin-bottom:10px;
 }
 
 .green{color:#00d26a;}
@@ -117,7 +137,7 @@ margin-top:10px;
 background:#0d0d0d;
 border:1px solid #333;
 color:#fff;
-border-radius:6px;
+border-radius:8px;
 }
 
 button{
@@ -126,28 +146,35 @@ padding:12px;
 margin-top:12px;
 background:#d4af37;
 border:none;
-color:#000;
 font-weight:bold;
+color:#000;
 cursor:pointer;
-border-radius:6px;
+border-radius:8px;
 }
 
 .result{
 margin-top:15px;
-font-size:22px;
+font-size:24px;
 color:#d4af37;
 font-weight:bold;
 }
 
-.contact a{
-display:block;
-background:#141414;
-padding:14px;
-margin-top:10px;
-text-decoration:none;
-color:#fff;
-border:1px solid #333;
-border-radius:8px;
+.placeholder{
+padding:35px;
+border:2px dashed #444;
+border-radius:14px;
+text-align:center;
+color:#999;
+background:#111;
+}
+
+.feature{
+text-align:left;
+}
+
+.feature li{
+margin:10px 0;
+color:#ccc;
 }
 
 footer{
@@ -161,13 +188,14 @@ margin-top:50px;
 
 <script>
 function convertRMB(){
-let rmb=document.getElementById("rmb").value;
+let rmb=parseFloat(document.getElementById("rmb").value||0);
 let result=rmb*610;
 document.getElementById("output").innerHTML=result.toLocaleString()+" MMK";
 }
 </script>
 
 </head>
+
 <body>
 
 <header>
@@ -177,8 +205,9 @@ document.getElementById("output").innerHTML=result.toLocaleString()+" MMK";
 <a href="#">Home</a>
 <a href="#">Rates</a>
 <a href="#">Tools</a>
+<a href="#">Market</a>
 <a href="#">Ads</a>
-<a href="#">Contact</a>
+<a href="#">About</a>
 </nav>
 
 <div class="lang">
@@ -191,8 +220,9 @@ document.getElementById("output").innerHTML=result.toLocaleString()+" MMK";
 <section class="hero">
 <h1>实时汇率 · 精准计算 · 助力生意</h1>
 <p>
-缅甸领先汇率与贸易平台，帮助商人掌握市场机会。
+缅甸领先的智能汇率与贸易平台。帮助商人、采购者、投资者快速掌握人民币、美元、泰铢市场动态。
 </p>
+<a href="#" class="hero-btn">立即开始</a>
 </section>
 
 <section class="section">
@@ -203,19 +233,19 @@ document.getElementById("output").innerHTML=result.toLocaleString()+" MMK";
 <div class="card">
 <h3>人民币 RMB</h3>
 <div class="rate">610</div>
-<p class="green">▲ +5</p>
+<p class="green">▲ +5 Today</p>
 </div>
 
 <div class="card">
 <h3>美元 USD</h3>
 <div class="rate">4210</div>
-<p class="red">▼ -12</p>
+<p class="red">▼ -12 Today</p>
 </div>
 
 <div class="card">
 <h3>泰铢 THB</h3>
 <div class="rate">115</div>
-<p class="green">▲ +1</p>
+<p class="green">▲ +1 Today</p>
 </div>
 
 </div>
@@ -225,9 +255,44 @@ document.getElementById("output").innerHTML=result.toLocaleString()+" MMK";
 <h2 class="title">人民币换算器</h2>
 
 <div class="card">
-<input type="number" id="rmb" placeholder="输入人民币金额">
+<input type="number" id="rmb" placeholder="输入人民币金额 RMB">
 <button onclick="convertRMB()">立即换算</button>
 <div class="result" id="output">0 MMK</div>
+</div>
+</section>
+
+<section class="section">
+<h2 class="title">为什么选择 Myanmar Rate</h2>
+
+<div class="grid">
+
+<div class="card feature">
+<h3>实时市场价格</h3>
+<ul>
+<li>每日更新</li>
+<li>适合贸易用户</li>
+<li>快速查看趋势</li>
+</ul>
+</div>
+
+<div class="card feature">
+<h3>专业工具</h3>
+<ul>
+<li>换算器</li>
+<li>利润计算</li>
+<li>成本分析</li>
+</ul>
+</div>
+
+<div class="card feature">
+<h3>多语言支持</h3>
+<ul>
+<li>中文</li>
+<li>English</li>
+<li>မြန်မာ</li>
+</ul>
+</div>
+
 </div>
 </section>
 
@@ -236,36 +301,38 @@ document.getElementById("output").innerHTML=result.toLocaleString()+" MMK";
 
 <div class="grid">
 
-<div class="card">
-<h3>汇款公司</h3>
-<p>中国 → 缅甸 快速到账</p>
+<div class="placeholder">
+Premium Banner Space<br><br>
+Available Soon
 </div>
 
-<div class="card">
-<h3>物流公司</h3>
-<p>昆明直达曼德勒</p>
+<div class="placeholder">
+Top Sponsor Slot<br><br>
+Available Soon
 </div>
 
-<div class="card">
-<h3>手机批发</h3>
-<p>全缅最低价供应</p>
+<div class="placeholder">
+Business Promotion Space<br><br>
+Available Soon
 </div>
 
 </div>
 </section>
 
 <section class="section">
-<h2 class="title">联系我们投广告</h2>
+<h2 class="title">联系我们</h2>
 
-<div class="contact">
-<a href="#">Telegram 联系</a>
-<a href="#">Facebook 联系</a>
-<a href="#">WhatsApp 联系</a>
+<div class="grid">
+
+<div class="placeholder">Telegram - Coming Soon</div>
+<div class="placeholder">Facebook - Coming Soon</div>
+<div class="placeholder">WhatsApp - Coming Soon</div>
+
 </div>
 </section>
 
 <footer>
-© 2026 Myanmar Rate V1.1
+© 2026 Myanmar Rate V1.2 | Smart Exchange Platform
 </footer>
 
 </body>
