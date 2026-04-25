@@ -1,732 +1,730 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Myanmar Rate - Smart Exchange Platform</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-  :root {
-    --bg: #050505;
-    --surface: #121212;
-    --surface-hover: #181818;
-    --line: #2a2a2a;
-    --gold: #e2c044;
-    --gold-hover: #f3d45c;
-    --text: #fdfdfd;
-    --muted: #9e9e9e;
-    --green: #22c55e;
-    --red: #ef4444;
-    --radius: 16px;
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Myanmar Rate | V3.0 Premium Exchange Platform</title>
+    <meta name="description" content="Myanmar's leading real-time exchange rate platform. Track USD, RMB, THB, SGD, USDT to MMK with live market trends and smart calculators.">
+    <meta name="keywords" content="Myanmar Rate, MMK exchange, USD to MMK, RMB to MMK, THB to MMK, SGD to MMK, USDT to MMK, Myanmar Black Market Rate">
+    <meta name="author" content="Myanmar Rate">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #050505;
+            --surface: #121212;
+            --surface-light: #1a1a1a;
+            --border-color: #262626;
+            --gold: #e5c158;
+            --gold-hover: #fce181;
+            --gold-dim: rgba(229, 193, 88, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #9e9e9e;
+            --up-color: #00e676;
+            --up-bg: rgba(0, 230, 118, 0.1);
+            --down-color: #ff4d4d;
+            --down-bg: rgba(255, 77, 77, 0.1);
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-  /* 全局重置与自定义滚动条 */
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', 'Noto Sans SC', sans-serif; }
-  html { scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--text); overflow-x: hidden; }
-  ::-webkit-scrollbar { width: 8px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Noto Sans SC', 'Padauk', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-  /* 导航栏 */
-  header {
-    position: sticky; top: 0; z-index: 50;
-    background: rgba(5, 5, 5, 0.85);
-    border-bottom: 1px solid var(--line);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-  .topbar {
-    max-width: 1200px; margin: auto; padding: 16px 20px;
-    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
-  }
-  .brand { display: flex; align-items: center; gap: 10px; color: var(--gold); font-weight: 800; font-size: 24px; letter-spacing: -0.5px; }
-  nav { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-  nav a {
-    color: var(--muted); text-decoration: none; font-size: 14px; font-weight: 600;
-    padding: 8px 12px; border-radius: 8px; transition: var(--transition);
-  }
-  nav a:hover { background: rgba(255,255,255,0.05); color: var(--text); }
-  
-  /* 按钮通用样式 */
-  .btn, button {
-    font-family: inherit; transition: var(--transition); cursor: pointer; font-weight: 700;
-  }
-  .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
-  .lang-btn {
-    border: 1px solid var(--line); background: transparent; color: var(--muted);
-    padding: 8px 14px; border-radius: 8px; font-size: 13px;
-  }
-  .lang-btn.active { background: var(--gold); color: #000; border-color: var(--gold); }
-  .lang-btn:hover:not(.active) { color: var(--text); border-color: var(--muted); }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
 
-  /* Hero 区域 */
-  .hero { max-width: 1200px; margin: auto; padding: 80px 20px 50px; text-align: center; }
-  .hero h1 {
-    color: var(--text); font-size: clamp(36px, 6vw, 60px); font-weight: 900;
-    line-height: 1.1; margin-bottom: 20px; letter-spacing: -1px;
-  }
-  .hero h1 span { color: var(--gold); }
-  .hero p { color: var(--muted); max-width: 700px; margin: 0 auto 32px; font-size: 18px; line-height: 1.6; }
-  
-  .primary-btn {
-    background: var(--gold); color: #000; border: none; text-decoration: none;
-    padding: 14px 28px; border-radius: 12px; font-size: 16px; display: inline-block;
-    box-shadow: 0 4px 20px rgba(226, 192, 68, 0.2);
-  }
-  .primary-btn:hover { background: var(--gold-hover); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(226, 192, 68, 0.3); }
-  .ghost-btn {
-    background: transparent; color: var(--text); border: 1px solid var(--line); text-decoration: none;
-    padding: 14px 28px; border-radius: 12px; font-size: 16px; display: inline-block;
-  }
-  .ghost-btn:hover { background: var(--surface); border-color: var(--muted); }
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 20px;
+        }
 
-  /* 标签 */
-  .pill { display: inline-block; border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; margin: 4px; color: var(--muted); background: var(--surface); font-size: 13px; font-weight: 600; }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-  /* 滚动公告 */
-  .notice { max-width: 1200px; margin: 0 auto 20px; padding: 0 20px; }
-  .ticker {
-    border: 1px solid var(--gold); background: rgba(226, 192, 68, 0.05);
-    padding: 12px 16px; border-radius: 10px; color: var(--gold); font-size: 14px;
-    display: flex; gap: 8px; align-items: center;
-  }
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
 
-  /* 通用 Section */
-  .section { max-width: 1200px; margin: auto; padding: 40px 20px; }
-  .section-header { text-align: center; margin-bottom: 40px; }
-  .section h2 { color: var(--text); font-size: 32px; font-weight: 800; margin-bottom: 10px; }
-  .section h2 span { color: var(--gold); }
-  .sub { color: var(--muted); font-size: 15px; }
+        .logo span {
+            color: var(--gold);
+        }
 
-  /* 布局与卡片 */
-  .grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
-  .split { display: grid; gap: 24px; grid-template-columns: 1fr 1fr; align-items: stretch; }
-  @media (max-width: 800px) { .split { grid-template-columns: 1fr; } }
-  
-  .card {
-    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-    padding: 24px; transition: var(--transition); position: relative; overflow: hidden;
-  }
-  .card:hover { border-color: #333; transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.4); }
-  .card h3 { color: var(--text); margin-bottom: 16px; font-size: 18px; display: flex; justify-content: space-between; }
-  
-  /* 汇率数字显示 */
-  .rate { font-size: 40px; font-weight: 900; margin: 8px 0; color: var(--gold); line-height: 1; }
-  .trend { font-size: 13px; font-weight: 700; padding: 4px 8px; border-radius: 6px; display: inline-block; }
-  .up { background: rgba(34, 197, 94, 0.1); color: var(--green); }
-  .down { background: rgba(239, 68, 68, 0.1); color: var(--red); }
+        .lang-switch {
+            display: flex;
+            gap: 6px;
+            background: var(--surface);
+            padding: 4px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
 
-  /* 表单元素 */
-  .input-group { margin-bottom: 16px; }
-  label { display: block; color: var(--muted); font-size: 13px; margin-bottom: 6px; font-weight: 600; }
-  input, select, textarea {
-    width: 100%; background: #000; color: #fff; border: 1px solid var(--line);
-    border-radius: 10px; padding: 14px; font-size: 16px; transition: var(--transition);
-  }
-  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(226, 192, 68, 0.15); }
-  textarea { min-height: 100px; resize: vertical; }
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
 
-  /* 提交按钮与结果块 */
-  .action-btn {
-    width: 100%; background: var(--gold); color: #000; border: none; border-radius: 10px;
-    padding: 14px; font-weight: 800; font-size: 16px; margin-top: 8px;
-  }
-  .action-btn:hover { background: var(--gold-hover); }
-  .action-btn.secondary { background: #1a1a1a; color: var(--text); border: 1px solid #333; }
-  .action-btn.secondary:hover { background: #222; }
+        .lang-btn.active {
+            background: var(--gold-dim);
+            color: var(--gold);
+        }
 
-  .result-box {
-    margin-top: 16px; padding: 16px; border-radius: 10px; background: rgba(226, 192, 68, 0.05);
-    border: 1px dashed var(--gold); display: flex; align-items: center; justify-content: space-between;
-  }
-  .result-val { font-size: 22px; font-weight: 900; color: var(--gold); }
-  .copy-btn { background: transparent; border: none; color: var(--gold); cursor: pointer; padding: 4px; }
-  .copy-btn:hover { opacity: 0.7; }
+        /* Main Container */
+        .main-content {
+            max-width: 1200px;
+            margin: 100px auto 40px;
+            padding: 0 20px;
+        }
 
-  /* 广告与后台 */
-  .adbox {
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-    text-align: center; border: 1px dashed #444; border-radius: var(--radius);
-    padding: 30px 20px; background: rgba(255,255,255,0.02); min-height: 140px;
-    transition: var(--transition);
-  }
-  .adbox:hover { border-color: var(--gold); background: rgba(226,192,68,0.03); }
-  .adbox strong { color: var(--gold); font-size: 16px; margin-bottom: 6px; }
-  
-  .admin-panel { margin-top: 24px; border: 1px solid #333; border-radius: var(--radius); background: #0a0a0a; padding: 24px; }
-  .contact-link { display: flex; align-items: center; justify-content: center; text-decoration: none; color: var(--text); background: var(--surface); border: 1px solid var(--line); padding: 16px; border-radius: 12px; font-weight: 700; transition: var(--transition); }
-  .contact-link:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
-  
-  .small-note { color: var(--muted); font-size: 12px; margin-top: 8px; display: block; }
-  .footer { max-width: 1200px; margin: 40px auto 0; padding: 30px 20px; color: var(--muted); border-top: 1px solid var(--line); text-align: center; font-size: 14px; }
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 40px 0;
+            animation: fadeIn 0.8s ease-out;
+        }
 
-  /* 优美的 Toast 通知组件 */
-  .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
-  .toast {
-    background: #1e1e1e; color: #fff; padding: 14px 20px; border-radius: 10px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-left: 4px solid var(--gold);
-    font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 10px;
-    transform: translateX(120%); opacity: 0; transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  }
-  .toast.show { transform: translateX(0); opacity: 1; }
-  .toast.success { border-color: var(--green); }
-  .toast.error { border-color: var(--red); }
-</style>
+        .hero h1 {
+            font-size: clamp(32px, 6vw, 56px);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #fff 0%, #a5a5a5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--text-secondary);
+            font-size: clamp(16px, 3vw, 18px);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 24px;
+            padding-top: 20px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .section-title span {
+            color: var(--gold);
+        }
+
+        /* Rates Grid */
+        .rates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .rate-card {
+            background: linear-gradient(145deg, var(--surface), #0a0a0a);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .rate-card:hover {
+            transform: translateY(-4px);
+            border-color: #333;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .rate-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .rate-card:hover::before {
+            opacity: 1;
+        }
+
+        .currency-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .currency-name {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .trend-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .trend-up { background: var(--up-bg); color: var(--up-color); }
+        .trend-down { background: var(--down-bg); color: var(--down-color); }
+
+        .rate-value {
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--gold);
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .rate-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        /* Calculator & Tools */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        @media (min-width: 768px) {
+            .tools-grid { grid-template-columns: 3fr 2fr; }
+        }
+
+        .tool-card {
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .calculator-inputs {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 12px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 8px;
+        }
+
+        input[type="number"], select {
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 20px;
+            font-weight: 700;
+            padding: 12px;
+            width: 100%;
+            outline: none;
+            appearance: none;
+        }
+
+        select {
+            cursor: pointer;
+            border-left: 1px solid var(--border-color);
+            color: var(--gold);
+            text-align: center;
+        }
+
+        .calc-result {
+            margin-top: 24px;
+            padding: 20px;
+            background: var(--gold-dim);
+            border-radius: var(--radius-md);
+            border: 1px dashed rgba(229, 193, 88, 0.3);
+            text-align: center;
+        }
+
+        .calc-result span {
+            display: block;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .calc-result strong {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--gold);
+        }
+
+        /* Ads Zone */
+        .ads-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .ad-banner {
+            background: linear-gradient(45deg, #111, #1a1a1a);
+            border: 1px dashed #333;
+            border-radius: var(--radius-md);
+            height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            cursor: pointer;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ad-banner:hover {
+            border-color: var(--gold);
+            background: var(--gold-dim);
+        }
+
+        .ad-banner strong {
+            color: var(--gold);
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .ad-tag {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #222;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .google-ad-placeholder {
+            width: 100%;
+            height: 90px;
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #444;
+            font-size: 12px;
+            margin-bottom: 40px;
+            border-radius: 8px;
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 60px;
+        }
+
+        .btn-social {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 18px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 16px;
+            text-decoration: none;
+            color: #fff;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-tg { background: #2AABEE; }
+        .btn-tg:hover { background: #229ED9; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(42, 171, 238, 0.3); }
+        .btn-wa { background: #25D366; }
+        .btn-wa:hover { background: #128C7E; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3); }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 30px 20px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            .hero { padding: 20px 0; }
+            .rate-value { font-size: 32px; }
+            .tool-card { padding: 20px; }
+            .calculator-inputs { grid-template-columns: 1fr; }
+            select { border-left: none; border-top: 1px solid var(--border-color); text-align: left; }
+        }
+    </style>
 </head>
 <body>
 
-<header>
-  <div class="topbar">
-    <div class="brand"><span class="icon">⚡</span><span id="brandText">Myanmar Rate</span></div>
-    <nav>
-      <a href="#home" id="navHome">Home</a>
-      <a href="#rates" id="navRates">Rates</a>
-      <a href="#tools" id="navTools">Tools</a>
-      <a href="#ads" id="navAds">Ads</a>
-      <a href="#contact" id="navContact">Contact</a>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                ⚡ <span>Myanmar</span>Rate
+            </a>
+            <div class="lang-switch">
+                <button class="lang-btn active" onclick="setLang('en')" id="btn-en">EN</button>
+                <button class="lang-btn" onclick="setLang('zh')" id="btn-zh">中文</button>
+                <button class="lang-btn" onclick="setLang('mm')" id="btn-mm">မြန်မာ</button>
+            </div>
+        </div>
     </nav>
-    <div class="btn-group">
-      <button class="lang-btn active" id="btnZh" onclick="setLang('zh')">中</button>
-      <button class="lang-btn" id="btnEn" onclick="setLang('en')">EN</button>
-      <button class="lang-btn" id="btnMm" onclick="setLang('mm')">မြန်မာ</button>
-    </div>
-  </div>
-</header>
 
-<section class="hero" id="home">
-  <h1 id="heroTitle">精准汇率 <span>驱动贸易</span></h1>
-  <p id="heroDesc">专为中缅泰贸易打造的智能工具台。实时跟进黑市汇率、秒速换算、一键测算利润底线。</p>
-  <div class="btn-group" style="justify-content: center; margin-bottom: 24px;">
-    <a class="primary-btn" href="#rates" id="heroBtn1">获取今日汇率</a>
-    <a class="ghost-btn" href="#contact" id="heroBtn2">商务合作预约</a>
-  </div>
-  <div>
-    <span class="pill">RMB / MMK</span>
-    <span class="pill">USD / MMK</span>
-    <span class="pill">THB / MMK</span>
-    <span class="pill">Auto Calculate</span>
-  </div>
-</section>
+    <main class="main-content">
+        
+        <section class="hero">
+            <h1 id="hero-title">Premium Market Rates</h1>
+            <p id="hero-desc">The most accurate, real-time black market exchange rates for MMK. Trusted by cross-border merchants.</p>
+        </section>
 
-<div class="notice">
-  <div class="ticker">
-    <strong id="tickerLabel">📣 公告：</strong>
-    <span id="noticeText">系统正在加载最新公告内容...</span>
-  </div>
-</div>
-
-<section class="section" id="rates">
-  <div class="section-header">
-    <h2 id="ratesTitle">今日<span>汇率大盘</span></h2>
-    <p class="sub" id="ratesSub">基于市场行情，支持商户根据本地实际情况自定义汇率参数。</p>
-  </div>
-
-  <div class="grid">
-    <div class="card">
-      <h3 id="rmbTitle">人民币 (RMB)</h3>
-      <div class="rate" id="rmbRate">610</div>
-      <div class="trend up" id="rmbChange">▲ Stable</div>
-    </div>
-    <div class="card">
-      <h3 id="usdTitle">美元 (USD)</h3>
-      <div class="rate" id="usdRate">4210</div>
-      <div class="trend down" id="usdChange">▼ Fluctuating</div>
-    </div>
-    <div class="card">
-      <h3 id="thbTitle">泰铢 (THB)</h3>
-      <div class="rate" id="thbRate">115</div>
-      <div class="trend up" id="thbChange">▲ Stable</div>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top: 24px;">
-    <h3 id="editRatesTitle">⚙️ 参数校准面板</h3>
-    <div class="grid" style="gap: 16px; margin-bottom: 16px;">
-      <div class="input-group">
-        <label>RMB → MMK</label>
-        <input type="number" id="inputRMB" value="610">
-      </div>
-      <div class="input-group">
-        <label>USD → MMK</label>
-        <input type="number" id="inputUSD" value="4210">
-      </div>
-      <div class="input-group">
-        <label>THB → MMK</label>
-        <input type="number" id="inputTHB" value="115">
-      </div>
-    </div>
-    <div class="split">
-      <button class="action-btn" onclick="saveRates()" id="saveRatesBtn">保存并应用最新汇率</button>
-      <button class="action-btn secondary" onclick="resetRates()" id="resetRatesBtn">恢复系统默认值</button>
-    </div>
-    <div class="small-note" id="lastSaved" style="text-align: right; margin-top: 12px;">最后更新：—</div>
-  </div>
-</section>
-
-<section class="section" id="tools">
-  <div class="section-header">
-    <h2 id="toolsTitle">商贸<span>计算引擎</span></h2>
-    <p class="sub" id="toolsSub">输入数值自动出结果，提升对客报价与进货决策效率。</p>
-  </div>
-
-  <div class="split">
-    <div class="card">
-      <h3 id="convertTitle">💱 极速换算器</h3>
-      <div class="grid" style="gap:16px;">
-        <div class="input-group">
-          <label id="fromLabel">输入外币金额</label>
-          <input type="number" id="amount" placeholder="例如: 1000" oninput="convert()">
+        <div class="section-header">
+            <h2 class="section-title" id="rates-title">Today's <span>Market</span></h2>
+            <span style="color:var(--text-secondary); font-size: 13px;" id="live-indicator">🟢 Live Updates</span>
         </div>
-        <div class="input-group">
-          <label id="currencyLabel">选择币种</label>
-          <select id="currency" onchange="convert()">
-            <option value="RMB">🇨🇳 RMB (人民币)</option>
-            <option value="USD">🇺🇸 USD (美元)</option>
-            <option value="THB">🇹🇭 THB (泰铢)</option>
-          </select>
+
+        <div class="rates-grid" id="rates-container">
+            </div>
+
+        <div class="google-ad-placeholder">
+            Google AdSense / Banner Advertisement Zone
         </div>
-      </div>
-      <div class="result-box">
-        <div>
-          <span class="small-note" style="margin:0;">换算结果 (MMK)</span>
-          <div class="result-val" id="convertResult">0</div>
+
+        <div class="section-header">
+            <h2 class="section-title" id="calc-title">Exchange <span>Calculator</span></h2>
         </div>
-        <button class="copy-btn" onclick="copyText('convertResult')">📋 复制</button>
-      </div>
-      <div class="small-note" id="convertNote">提示：更改输入框内容系统会自动计算。</div>
-    </div>
 
-    <div class="card">
-      <h3 id="profitTitle">📈 倒推利润模型</h3>
-      <div class="split" style="gap: 16px;">
-        <div class="input-group">
-          <label id="costLabel">拿货成本 (RMB)</label>
-          <input type="number" id="costRMB" placeholder="例如: 500" oninput="calcProfit()">
+        <div class="tools-grid">
+            <div class="tool-card">
+                <label class="input-label" id="calc-label-amount">Enter Amount to Convert</label>
+                <div class="calculator-inputs">
+                    <input type="number" id="calc-input" placeholder="e.g. 1000" oninput="calculate()">
+                    <select id="calc-currency" onchange="calculate()">
+                        <option value="USD">🇺🇸 USD</option>
+                        <option value="RMB">🇨🇳 RMB</option>
+                        <option value="THB">🇹🇭 THB</option>
+                        <option value="SGD">🇸🇬 SGD</option>
+                        <option value="USDT">₮ USDT</option>
+                    </select>
+                </div>
+                
+                <div class="calc-result">
+                    <span id="calc-label-result">Estimated You Get (MMK)</span>
+                    <strong id="calc-output">0</strong>
+                </div>
+            </div>
+
+            <div class="tool-card" style="background: linear-gradient(135deg, #1a1a1a, #0a0a0a);">
+                <h3 style="color:var(--gold); margin-bottom: 16px; display:flex; align-items:center; gap:8px;" id="info-title">
+                    📊 Trading Insights
+                </h3>
+                <ul style="color:var(--text-secondary); font-size: 14px; list-style: none; display:grid; gap:12px;">
+                    <li style="display:flex; justify-content:space-between; border-bottom:1px solid #222; padding-bottom:8px;">
+                        <span id="info-1">Most Volatile:</span> <strong style="color:#fff;">USDT</strong>
+                    </li>
+                    <li style="display:flex; justify-content:space-between; border-bottom:1px solid #222; padding-bottom:8px;">
+                        <span id="info-2">Highest Volume:</span> <strong style="color:#fff;">THB / RMB</strong>
+                    </li>
+                    <li style="display:flex; justify-content:space-between; border-bottom:1px solid #222; padding-bottom:8px;">
+                        <span id="info-3">Market Status:</span> <strong style="color:var(--up-color);">Active</strong>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="input-group">
-          <label id="shipLabel">综合杂费 (MMK)</label>
-          <input type="number" id="shippingMMK" placeholder="运费/清关等: 50000" oninput="calcProfit()">
+
+        <div class="section-header">
+            <h2 class="section-title" id="ads-title">Premium <span>Partners</span></h2>
         </div>
-      </div>
-      <div class="input-group">
-        <label id="saleLabel">终端售价 (MMK)</label>
-        <input type="number" id="saleMMK" placeholder="打算卖多少钱: 600000" oninput="calcProfit()">
-      </div>
-      
-      <div class="result-box">
-        <div>
-          <span class="small-note" style="margin:0;">净利润预估</span>
-          <div class="result-val" id="profitResult">0 <span style="font-size:14px;color:var(--muted)"> (0%)</span></div>
+        
+        <div class="ads-grid">
+            <a href="#" class="ad-banner">
+                <span class="ad-tag">AD</span>
+                <strong id="ad-1-title">Slot 1 Available</strong>
+                <span style="font-size: 12px;" id="ad-1-desc">Top visibility for Remittance</span>
+            </a>
+            <a href="#" class="ad-banner">
+                <span class="ad-tag">AD</span>
+                <strong id="ad-2-title">Slot 2 Available</strong>
+                <span style="font-size: 12px;" id="ad-2-desc">Best for Logistics Services</span>
+            </a>
+            <a href="#" class="ad-banner">
+                <span class="ad-tag">AD</span>
+                <strong id="ad-3-title">Slot 3 Available</strong>
+                <span style="font-size: 12px;" id="ad-3-desc">Premium Brand Exposure</span>
+            </a>
         </div>
-        <button class="copy-btn" onclick="copyText('profitResult')">📋</button>
-      </div>
-      <div class="small-note" id="profitNote">根据当前保存的 RMB 汇率底座进行计算。</div>
-    </div>
-  </div>
-</section>
 
-<section class="section" id="ads">
-  <div class="section-header">
-    <h2 id="adsTitle">品牌<span>曝光阵地</span></h2>
-    <p class="sub" id="adsSub">高净值商人流量汇聚地，预留黄金广告位供物流/换汇机构入驻。</p>
-  </div>
+        <div class="section-header">
+            <h2 class="section-title" id="contact-title">Contact <span>Us</span></h2>
+        </div>
 
-  <div class="grid">
-    <div class="adbox">
-      <strong>🏆 Premium Banner</strong>
-      <div id="ad1" style="color:var(--text); font-size:18px; font-weight:700; margin: 8px 0;">Available Soon</div>
-      <span class="small-note">首页置顶最大曝光量</span>
-    </div>
-    <div class="adbox">
-      <strong>💎 Featured Sponsor</strong>
-      <div id="ad2" style="color:var(--text); font-size:18px; font-weight:700; margin: 8px 0;">Available Soon</div>
-      <span class="small-note">工具区核心视觉位</span>
-    </div>
-    <div class="adbox">
-      <strong>🚀 Business Promotion</strong>
-      <div id="ad3" style="color:var(--text); font-size:18px; font-weight:700; margin: 8px 0;">Available Soon</div>
-      <span class="small-note">精准引流获客推荐</span>
-    </div>
-  </div>
+        <div class="contact-grid">
+            <a href="#" class="btn-social btn-tg">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.121 2.21544C21.3214 2.28828 21.4939 2.41783 21.6163 2.58784C21.7388 2.75786 21.8055 2.96061 21.8079 3.16982C21.8103 3.37903 21.7482 3.5852 21.63 3.76161C21.5118 3.93803 21.3429 4.0768 21.1448 4.16016L3.43572 11.6033C3.21852 11.6946 3.03362 11.8415 2.90299 12.0268C2.77236 12.2121 2.70154 12.4281 2.69919 12.6489C2.69683 12.8697 2.76307 13.0858 2.88959 13.2713C3.0161 13.4568 3.19747 13.6039 3.41249 13.6953L8.27192 15.7607L10.3705 21.2163C10.4578 21.4431 10.6094 21.6366 10.8066 21.7728C11.0039 21.9089 11.2381 21.9818 11.4799 21.9823C11.7583 21.9823 12.027 21.8809 12.2384 21.6958L15.3402 18.9806L19.4678 21.5606C19.6706 21.6874 19.9056 21.7512 20.1444 21.7441C20.3832 21.737 20.6156 21.6593 20.8142 21.5202C21.0128 21.3811 21.1693 21.1865 21.2655 20.9593C21.3618 20.7322 21.3938 20.4822 21.3582 20.2388L18.6656 3.32837C18.6322 3.11867 18.5441 2.92318 18.4116 2.76343C18.2792 2.60368 18.1075 2.48589 17.9158 2.4231C17.724 2.36031 17.5199 2.35496 17.3268 2.4076C17.1337 2.46025 16.9592 2.56877 16.8236 2.72088L21.121 2.21544Z" fill="white"/></svg>
+                <span id="btn-tg-text">Telegram Channel</span>
+            </a>
+            <a href="#" class="btn-social btn-wa">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.52 3.44C18.24 1.15 15.18 0 12 0C5.38 0 0 5.38 0 12C0 14.12 0.55 16.19 1.58 18.03L0 24L6.11 22.4C7.9 23.35 9.92 23.86 12 23.86C18.62 23.86 24 18.48 24 11.86C24 8.65 22.77 5.68 20.52 3.44ZM12 21.84C10.2 21.84 8.46 21.36 6.94 20.46L6.58 20.25L2.94 21.21L3.92 17.65L3.68 17.27C2.69 15.69 2.16 13.88 2.16 12C2.16 6.58 6.58 2.16 12 2.16C14.63 2.16 17.12 3.19 18.98 5.05C20.84 6.91 21.86 9.4 21.86 12.03C21.84 17.45 17.42 21.84 12 21.84ZM17.4 14.44C17.1 14.29 15.63 13.57 15.35 13.47C15.08 13.37 14.88 13.32 14.68 13.62C14.48 13.92 13.92 14.59 13.74 14.79C13.57 14.99 13.39 15.01 13.1 14.86C12.8 14.71 11.83 14.4 10.68 13.38C9.76 12.58 9.14 11.58 8.96 11.28C8.78 10.98 8.94 10.82 9.09 10.67C9.22 10.53 9.38 10.33 9.53 10.16C9.68 9.99 9.73 9.86 9.83 9.66C9.93 9.46 9.88 9.29 9.8 9.14C9.73 8.99 9.14 7.51 8.89 6.91C8.65 6.33 8.41 6.41 8.23 6.41C8.06 6.41 7.86 6.41 7.66 6.41C7.46 6.41 7.14 6.49 6.86 6.79C6.58 7.09 5.8 7.82 5.8 9.3C5.8 10.78 6.89 12.2 7.04 12.4C7.19 12.6 9.14 15.61 12.14 16.9C12.85 17.2 13.41 17.38 13.85 17.52C14.57 17.75 15.22 17.71 15.74 17.63C16.32 17.54 17.53 16.9 17.78 16.19C18.03 15.48 18.03 14.87 17.95 14.74C17.88 14.6 17.68 14.54 17.4 14.44Z" fill="white"/></svg>
+                <span id="btn-wa-text">WhatsApp Support</span>
+            </a>
+        </div>
 
-  <div class="admin-panel">
-    <h3 style="color:var(--gold); margin-bottom:16px; display:flex; align-items:center; gap:8px;">
-      🔒 站长控制台
-    </h3>
-    <div class="split" style="align-items: end;">
-      <div class="input-group" style="margin:0;">
-        <label>授权密钥</label>
-        <input type="password" id="adminPass" placeholder="输入访问密码">
-      </div>
-      <button class="action-btn" style="margin:0;" onclick="unlockAdmin()">验证身份进入</button>
-    </div>
+    </main>
 
-    <div id="adminContent" style="display:none; margin-top:24px; padding-top:24px; border-top:1px solid #222;">
-      <div class="input-group">
-        <label>全局滚动公告配置</label>
-        <textarea id="noticeInput" placeholder="输入最新通知..."></textarea>
-      </div>
-      <div class="grid" style="gap:16px;">
-        <div class="input-group"><label>广告位 1 内容</label><input type="text" id="ad1Input"></div>
-        <div class="input-group"><label>广告位 2 内容</label><input type="text" id="ad2Input"></div>
-        <div class="input-group"><label>广告位 3 内容</label><input type="text" id="ad3Input"></div>
-      </div>
-      <button class="action-btn" onclick="saveAllSiteData()">💾 同步数据至云端 (Supabase)</button>
-    </div>
-  </div>
-</section>
+    <footer>
+        <p>© 2026 Myanmar Rate Platform. All rights reserved.</p>
+        <p style="margin-top: 8px; color: #666;">Data is for reference only. Market rates fluctuate rapidly.</p>
+    </footer>
 
-<section class="section" id="contact">
-  <div class="section-header">
-    <h2 id="contactTitle">建立<span>连接</span></h2>
-    <p class="sub" id="contactSub">多渠道极速触达，提供7x24商务与技术支持。</p>
-  </div>
+    <script>
+        // Data Structure & Logic
+        const marketData = [
+            { id: 'USD', name: 'US Dollar', symbol: '🇺🇸 USD', rate: 4210, trend: 'up', change: '+1.2%', time: 'Just now' },
+            { id: 'RMB', name: 'Chinese Yuan', symbol: '🇨🇳 RMB', rate: 610, trend: 'up', change: '+0.5%', time: '5 mins ago' },
+            { id: 'THB', name: 'Thai Baht', symbol: '🇹🇭 THB', rate: 115, trend: 'down', change: '-0.3%', time: '12 mins ago' },
+            { id: 'SGD', name: 'Singapore Dollar', symbol: '🇸🇬 SGD', rate: 3100, trend: 'up', change: '+0.1%', time: '18 mins ago' },
+            { id: 'USDT', name: 'Tether (Crypto)', symbol: '₮ USDT', rate: 4250, trend: 'up', change: '+1.5%', time: 'Just now' },
+        ];
 
-  <div class="grid">
-    <a class="contact-link" href="#" onclick="showToast('Telegram Channel is setting up...', 'info'); return false;">✈️ Telegram - Coming Soon</a>
-    <a class="contact-link" href="#" onclick="showToast('Facebook Page is setting up...', 'info'); return false;">📘 Facebook - Coming Soon</a>
-    <a class="contact-link" href="#" onclick="showToast('WhatsApp is setting up...', 'info'); return false;">💬 WhatsApp - Coming Soon</a>
-  </div>
-</section>
+        // Dictionaries for 3 Languages
+        const i18n = {
+            en: {
+                "hero-title": "Premium Market Rates",
+                "hero-desc": "The most accurate, real-time black market exchange rates for MMK. Trusted by cross-border merchants.",
+                "rates-title": "Today's <span>Market</span>",
+                "live-indicator": "🟢 Live Updates",
+                "calc-title": "Exchange <span>Calculator</span>",
+                "calc-label-amount": "Enter Amount to Convert",
+                "calc-label-result": "Estimated You Get (MMK)",
+                "info-title": "📊 Trading Insights",
+                "info-1": "Most Volatile:",
+                "info-2": "Highest Volume:",
+                "info-3": "Market Status:",
+                "ads-title": "Premium <span>Partners</span>",
+                "ad-1-title": "Slot 1 Available",
+                "ad-1-desc": "Top visibility for Remittance",
+                "ad-2-title": "Slot 2 Available",
+                "ad-2-desc": "Best for Logistics Services",
+                "ad-3-title": "Slot 3 Available",
+                "ad-3-desc": "Premium Brand Exposure",
+                "contact-title": "Contact <span>Us</span>",
+                "btn-tg-text": "Telegram Channel",
+                "btn-wa-text": "WhatsApp Support",
+                "updated": "Updated:"
+            },
+            zh: {
+                "hero-title": "顶级黑市汇率大盘",
+                "hero-desc": "为中缅泰新商人提供最精准、实时的缅币黑市汇率，助您安全高效掌握财富密码。",
+                "rates-title": "今日<span>市场趋势</span>",
+                "live-indicator": "🟢 实时数据更新",
+                "calc-title": "智能汇率<span>计算器</span>",
+                "calc-label-amount": "输入外币金额",
+                "calc-label-result": "预计可得缅币 (MMK)",
+                "info-title": "📊 热门兑换资讯",
+                "info-1": "波动最大币种:",
+                "info-2": "最高交易量:",
+                "info-3": "市场活跃度:",
+                "ads-title": "商业合作<span>专区</span>",
+                "ad-1-title": "黄金广告位 1",
+                "ad-1-desc": "适合承兑/换汇机构曝光",
+                "ad-2-title": "黄金广告位 2",
+                "ad-2-desc": "推荐国际物流专线入驻",
+                "ad-3-title": "黄金广告位 3",
+                "ad-3-desc": "顶级品牌强力展示",
+                "contact-title": "联系<span>我们</span>",
+                "btn-tg-text": "加入 Telegram 频道",
+                "btn-wa-text": "WhatsApp 商务支持",
+                "updated": "更新于:"
+            },
+            mm: {
+                "hero-title": "အကောင်းဆုံး ငွေလဲနှုန်းများ",
+                "hero-desc": "မြန်မာကျပ်ငွေအတွက် အတိကျဆုံးနှင့် အမြန်ဆုံး ပြင်ပပေါက်ဈေး။ ကုန်သည်များ ယုံကြည်စိတ်ချရသော။",
+                "rates-title": "ယနေ့ <span>စျေးကွက်အခြေအနေ</span>",
+                "live-indicator": "🟢 တိုက်ရိုက် အပ်ဒိတ်များ",
+                "calc-title": "ငွေလဲ <span>တွက်စက်</span>",
+                "calc-label-amount": "ပမာဏ ထည့်သွင်းရန်",
+                "calc-label-result": "ခန့်မှန်းရရှိမည့် MMK",
+                "info-title": "📊 စျေးကွက် အချက်အလက်",
+                "info-1": "အပြောင်းအလဲအများဆုံး:",
+                "info-2": "အရောင်းအဝယ်အများဆုံး:",
+                "info-3": "စျေးကွက် အခြေအနေ:",
+                "ads-title": "ကြော်ငြာ <span>နေရာများ</span>",
+                "ad-1-title": "ကြော်ငြာနေရာ ၁ လွတ်သည်",
+                "ad-1-desc": "ငွေလွှဲလုပ်ငန်းများအတွက် အထူးသင့်လျော်",
+                "ad-2-title": "ကြော်ငြာနေရာ ၂ လွတ်သည်",
+                "ad-2-desc": "ကုန်စည်ပို့ဆောင်ရေးအတွက်",
+                "ad-3-title": "ကြော်ငြာနေရာ ၃ လွတ်သည်",
+                "ad-3-desc": "ပရီမီယံ ဘရန်းများအတွက်",
+                "contact-title": "ဆက်သွယ် <span>ရန်</span>",
+                "btn-tg-text": "Telegram ချန်နယ်",
+                "btn-wa-text": "WhatsApp အကူအညီ",
+                "updated": "အပ်ဒိတ်:"
+            }
+        };
 
-<div class="footer">
-  <div id="footerText" style="font-weight: 600;">© 2026 Myanmar Rate | Built for Smart Traders</div>
-  <div class="small-note" id="visitorText" style="margin-top:12px;">Unique Visitors: 0</div>
-</div>
+        let currentLang = 'en';
 
-<div class="toast-container" id="toastContainer"></div>
+        function renderRates() {
+            const container = document.getElementById('rates-container');
+            container.innerHTML = '';
+            
+            const upText = i18n[currentLang]["updated"];
 
-<script>
-  // Supabase 基础配置
-  const SUPABASE_URL = "https://figxyzymfjdlmiqanucz.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_EVaUT__hVOvf3qNT_cdPNw_Tb8wfvLs";
-  const sb = (window.supabase && SUPABASE_URL.indexOf("PASTE_") !== 0) 
-    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) 
-    : null;
+            marketData.forEach(item => {
+                const isUp = item.trend === 'up';
+                const trendClass = isUp ? 'trend-up' : 'trend-down';
+                const icon = isUp ? '📈' : '📉';
 
-  // 默认汇率
-  const defaultRates = { RMB: 610, USD: 4210, THB: 115 };
-  let rates = { ...defaultRates };
+                const card = `
+                    <div class="rate-card">
+                        <div class="currency-info">
+                            <div class="currency-name">${item.symbol}</div>
+                            <div class="trend-badge ${trendClass}">
+                                ${icon} ${item.change}
+                            </div>
+                        </div>
+                        <div class="rate-value">${item.rate.toLocaleString()}</div>
+                        <div class="rate-meta">
+                            <span>1 ${item.id} = ${item.rate} MMK</span>
+                            <span>${upText} ${item.time}</span>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += card;
+            });
+        }
 
-  // 多语言文案库
-  const texts = {
-    zh: {
-      brand: "Myanmar Rate",
-      navHome: "首页", navRates: "大盘", navTools: "工具", navAds: "广告", navContact: "联系",
-      heroTitle: "精准汇率 <span>驱动贸易</span>",
-      heroDesc: "专为中缅泰贸易打造的智能工具台。实时跟进黑市汇率、秒速换算、一键测算利润底线。",
-      heroBtn1: "获取今日汇率", heroBtn2: "商务合作预约",
-      tickerLabel: "📣 公告：", notice: "Myanmar Rate v2.0 正式上线，全新 UI 和实时计算引擎启动。",
-      ratesTitle: "今日<span>汇率大盘</span>", ratesSub: "基于市场行情，支持商户根据本地实际情况自定义汇率参数。",
-      editRatesTitle: "⚙️ 参数校准面板", saveRatesBtn: "保存并应用最新汇率", resetRatesBtn: "恢复系统默认值",
-      lastSavedPrefix: "数据同步于：",
-      toolsTitle: "商贸<span>计算引擎</span>", toolsSub: "输入数值自动出结果，提升对客报价与进货决策效率。",
-      convertTitle: "💱 极速换算器", fromLabel: "输入外币金额", currencyLabel: "选择基准币种",
-      convertNote: "提示：更改输入框内容系统会自动计算。",
-      profitTitle: "📈 倒推利润模型", costLabel: "拿货成本 (RMB)", shipLabel: "综合杂费 (MMK)", saleLabel: "终端售价 (MMK)",
-      profitNote: "根据当前保存的 RMB 汇率底座进行自动推演。",
-      adsTitle: "品牌<span>曝光阵地</span>", adsSub: "高净值商人流量汇聚地，预留黄金广告位供物流/换汇机构入驻。",
-      contactTitle: "建立<span>连接</span>", contactSub: "多渠道极速触达，提供7x24商务与技术支持。",
-      options: ["人民币", "美元", "泰铢"]
-    },
-    en: {
-      brand: "Myanmar Rate",
-      navHome: "Home", navRates: "Rates", navTools: "Tools", navAds: "Ads", navContact: "Contact",
-      heroTitle: "Smart Rates for <span>Smart Trade</span>",
-      heroDesc: "Intelligent platform for CN-MM-TH cross-border business. Real-time rates, instant converter, and dynamic profit calculator.",
-      heroBtn1: "Get Live Rates", heroBtn2: "Book Ad Space",
-      tickerLabel: "📣 Notice:", notice: "Myanmar Rate v2.0 is live with new UI and real-time computation engine.",
-      ratesTitle: "Market <span>Rates</span>", ratesSub: "Adjust base rates manually based on your local market conditions.",
-      editRatesTitle: "⚙️ Calibration Panel", saveRatesBtn: "Save & Apply Rates", resetRatesBtn: "Reset to Defaults",
-      lastSavedPrefix: "Last synced: ",
-      toolsTitle: "Trading <span>Tools</span>", toolsSub: "Auto-calculates as you type. Speed up your quoting process.",
-      convertTitle: "💱 Quick Converter", fromLabel: "Foreign Amount", currencyLabel: "Select Currency",
-      convertNote: "Tip: Calculation happens automatically as you type.",
-      profitTitle: "📈 Profit Model", costLabel: "Base Cost (RMB)", shipLabel: "Logistics (MMK)", saleLabel: "Sell Price (MMK)",
-      profitNote: "Calculates net margin automatically based on your active RMB rate.",
-      adsTitle: "Premium <span>Placement</span>", adsSub: "High-value traffic zone. Best for logistics and remittance services.",
-      contactTitle: "Let's <span>Connect</span>", contactSub: "Multi-channel support for business inquiries and tech assistance.",
-      options: ["RMB", "USD", "THB"]
-    },
-    mm: {
-      brand: "Myanmar Rate",
-      navHome: "ပင်မ", navRates: "ငွေလဲနှုန်း", navTools: "ကိရိယာများ", navAds: "ကြော်ငြာ", navContact: "ဆက်သွယ်ရန်",
-      heroTitle: "မှန်ကန်သော <span>ငွေလဲနှုန်းများ</span>",
-      heroDesc: "တိုက်ရိုက်ငွေလဲနှုန်း၊ အမြန်တွက်စက်နှင့် အမြတ်တွက်ရန် စမတ်ကိရိယာ။",
-      heroBtn1: "နှုန်းကြည့်မည်", heroBtn2: "လုပ်ငန်းဆက်သွယ်",
-      tickerLabel: "📣 ကြေညာချက်：", notice: "Myanmar Rate v2.0 ကို UI သစ်ဖြင့် စတင်အသုံးပြုနိုင်ပါပြီ။",
-      ratesTitle: "ယနေ့ <span>ငွေလဲနှုန်း</span>", ratesSub: "စျေးကွက်နှုန်းထားများကို မိမိစိတ်ကြိုက် ပြင်ဆင်အသုံးပြုနိုင်ပါသည်။",
-      editRatesTitle: "⚙️ နှုန်းပြင်ရန်", saveRatesBtn: "နှုန်းထားများ သိမ်းမည်", resetRatesBtn: "မူလအတိုင်းပြန်ထားမည်",
-      lastSavedPrefix: "နောက်ဆုံးပြင်ဆင်ချိန်：",
-      toolsTitle: "စမတ် <span>ကိရိယာများ</span>", toolsSub: "ရိုက်ထည့်လိုက်ရုံဖြင့် အလိုအလျောက် တွက်ချက်ပေးမည်။",
-      convertTitle: "💱 ငွေလဲတွက်စက်", fromLabel: "နိုင်ငံခြားငွေ ပမာဏ", currencyLabel: "ငွေကြေးရွေးချယ်ရန်",
-      convertNote: "အကြံပြုချက်: ရိုက်ထည့်လိုက်သည်နှင့် အလိုအလျောက် တွက်ပေးသည်။",
-      profitTitle: "📈 အမြတ်တွက်စက်", costLabel: "အရင်း (RMB)", shipLabel: "ပို့ဆောင်ခ (MMK)", saleLabel: "ရောင်းဈေး (MMK)",
-      profitNote: "လက်ရှိ RMB ငွေလဲနှုန်းပေါ်မူတည်ပြီး အမြတ်ကို အလိုအလျောက် တွက်ပေးသည်။",
-      adsTitle: "ကြော်ငြာ <span>နေရာများ</span>", adsSub: "ကုန်သည်များ လာရောက်မှုများသော နေရာ။",
-      contactTitle: "ဆက်သွယ် <span>ရန်</span>", contactSub: "လုပ်ငန်းနှင့် နည်းပညာအကူအညီများအတွက် ဆက်သွယ်နိုင်ပါသည်။",
-      options: ["RMB", "USD", "THB"]
-    }
-  };
+        function calculate() {
+            const amount = parseFloat(document.getElementById('calc-input').value) || 0;
+            const currency = document.getElementById('calc-currency').value;
+            const rateObj = marketData.find(item => item.id === currency);
+            
+            const result = amount * (rateObj ? rateObj.rate : 0);
+            
+            // Format to show commas and maximum 2 decimals if needed, but MMK is usually whole
+            document.getElementById('calc-output').innerText = result.toLocaleString('en-US', { maximumFractionDigits: 0 });
+        }
 
-  // Toast 优雅提示系统重写
-  function showToast(message, type = 'success') {
-    const container = document.getElementById("toastContainer");
-    const toast = document.createElement("div");
-    toast.className = `toast ${type}`;
-    
-    const icon = type === 'success' ? '✅' : (type === 'error' ? '❌' : 'ℹ️');
-    toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
-    
-    container.appendChild(toast);
-    
-    setTimeout(() => toast.classList.add("show"), 10);
-    setTimeout(() => {
-      toast.classList.remove("show");
-      setTimeout(() => toast.remove(), 400);
-    }, 3000);
-  }
+        function setLang(lang) {
+            currentLang = lang;
+            
+            // Update Active Buttons
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`btn-${lang}`).classList.add('active');
 
-  // 剪贴板复制功能
-  function copyText(elementId) {
-    const textToCopy = document.getElementById(elementId).innerText.split('\n')[0]; // 防止连同小字一起复制
-    navigator.clipboard.writeText(textToCopy).then(() => {
-      showToast("内容已复制到剪贴板！", "success");
-    }).catch(() => {
-      showToast("复制失败，请手动选取", "error");
-    });
-  }
+            // Translate DOM Elements
+            const texts = i18n[lang];
+            for (const key in texts) {
+                const el = document.getElementById(key);
+                if (el) {
+                    el.innerHTML = texts[key];
+                }
+            }
+            
+            // Adjust Font body
+            if(lang === 'mm') {
+                document.body.style.fontFamily = "'Padauk', 'Inter', sans-serif";
+            } else if (lang === 'zh') {
+                document.body.style.fontFamily = "'Noto Sans SC', 'Inter', sans-serif";
+            } else {
+                document.body.style.fontFamily = "'Inter', sans-serif";
+            }
 
-  // 加载本地数据
-  function loadLocalBackup() {
-    const saved = localStorage.getItem("myanmarRateRates");
-    if (saved) rates = JSON.parse(saved);
-    const notice = localStorage.getItem("myanmarRateNotice");
-    if (notice) document.getElementById("noticeText").textContent = notice;
-    ["ad1","ad2","ad3"].forEach(k => {
-      const v = localStorage.getItem("myanmarRate" + k.toUpperCase());
-      if (v) document.getElementById(k).textContent = v;
-    });
-  }
+            renderRates();
+        }
 
-  function saveLocalBackup() {
-    localStorage.setItem("myanmarRateRates", JSON.stringify(rates));
-    localStorage.setItem("myanmarRateNotice", document.getElementById("noticeText").textContent);
-    localStorage.setItem("myanmarRateAD1", document.getElementById("ad1").textContent);
-    localStorage.setItem("myanmarRateAD2", document.getElementById("ad2").textContent);
-    localStorage.setItem("myanmarRateAD3", document.getElementById("ad3").textContent);
-  }
-
-  function renderRates() {
-    document.getElementById("rmbRate").textContent = Number(rates.RMB).toLocaleString();
-    document.getElementById("usdRate").textContent = Number(rates.USD).toLocaleString();
-    document.getElementById("thbRate").textContent = Number(rates.THB).toLocaleString();
-    document.getElementById("inputRMB").value = rates.RMB;
-    document.getElementById("inputUSD").value = rates.USD;
-    document.getElementById("inputTHB").value = rates.THB;
-    // 渲染汇率后自动计算一次
-    convert(); calcProfit();
-  }
-
-  async function loadRatesFromSupabase() {
-    if (!sb) return;
-    try {
-      const { data } = await sb.from("rates").select("currency,value");
-      if (data && data.length) data.forEach(x => rates[x.currency] = Number(x.value));
-    } catch (e) { console.error("Supabase Error", e); }
-  }
-
-  async function loadSettingsFromSupabase() {
-    if (!sb) return;
-    try {
-      const { data } = await sb.from("site_settings").select("key,value");
-      if (data && data.length) {
-        data.forEach(x => {
-          if (x.key === "notice") document.getElementById("noticeText").textContent = x.value;
-          if (x.key === "ad1") document.getElementById("ad1").textContent = x.value;
-          if (x.key === "ad2") document.getElementById("ad2").textContent = x.value;
-          if (x.key === "ad3") document.getElementById("ad3").textContent = x.value;
-        });
-      }
-    } catch (e) { console.error("Supabase Error", e); }
-  }
-
-  async function saveRates() {
-    rates = {
-      RMB: Number(document.getElementById("inputRMB").value || 0),
-      USD: Number(document.getElementById("inputUSD").value || 0),
-      THB: Number(document.getElementById("inputTHB").value || 0)
-    };
-    if (!rates.RMB || !rates.USD || !rates.THB) {
-      showToast("检测到汇率为空，请输入有效数字", "error");
-      return;
-    }
-
-    renderRates(); saveLocalBackup();
-    const timeNow = new Date().toLocaleString();
-    localStorage.setItem("myanmarRateSavedAt", timeNow);
-    document.getElementById("lastSaved").textContent = getText("lastSavedPrefix") + timeNow;
-    
-    showToast("汇率参数已在本地更新", "success");
-
-    if (sb) {
-      try {
-        await sb.from("rates").upsert([
-          { currency: "RMB", value: rates.RMB },
-          { currency: "USD", value: rates.USD },
-          { currency: "THB", value: rates.THB }
-        ]);
-        showToast("已成功同步至云端数据库", "success");
-      } catch (e) {
-        showToast("云端同步异常，但本地已生效", "error");
-      }
-    }
-  }
-
-  function resetRates() {
-    rates = { ...defaultRates };
-    renderRates(); saveLocalBackup();
-    const timeNow = new Date().toLocaleString();
-    localStorage.setItem("myanmarRateSavedAt", timeNow);
-    document.getElementById("lastSaved").textContent = getText("lastSavedPrefix") + timeNow;
-    showToast("已恢复出厂汇率", "info");
-  }
-
-  // 实时换算器
-  function convert() {
-    const amount = Number(document.getElementById("amount").value || 0);
-    const currency = document.getElementById("currency").value;
-    const mmk = amount * (rates[currency] || 0);
-    document.getElementById("convertResult").textContent = Number(mmk).toLocaleString();
-  }
-
-  // 实时利润计算器
-  function calcProfit() {
-    const costRMB = Number(document.getElementById("costRMB").value || 0);
-    const shipping = Number(document.getElementById("shippingMMK").value || 0);
-    const sale = Number(document.getElementById("saleMMK").value || 0);
-
-    const totalCost = (costRMB * rates.RMB) + shipping;
-    const profit = sale - totalCost;
-    const margin = sale > 0 ? (profit / sale) * 100 : 0;
-
-    const resEl = document.getElementById("profitResult");
-    if(sale === 0 && costRMB === 0) { resEl.innerHTML = `0 <span style="font-size:14px;color:var(--muted)"> (0%)</span>`; return; }
-    
-    const color = profit >= 0 ? 'var(--green)' : 'var(--red)';
-    resEl.innerHTML = `<span style="color:${color}">${profit > 0 ? '+' : ''}${Math.round(profit).toLocaleString()}</span> 
-                       <span style="font-size:14px;color:var(--muted)"> (${margin.toFixed(1)}%)</span>`;
-  }
-
-  function getText(key) {
-    const lang = localStorage.getItem("myanmarRateLang") || "zh";
-    return texts[lang][key];
-  }
-
-  function setLang(lang) {
-    localStorage.setItem("myanmarRateLang", lang);
-    document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-    document.getElementById("btn" + lang.charAt(0).toUpperCase() + lang.slice(1)).classList.add('active');
-
-    const t = texts[lang];
-    document.documentElement.lang = lang === "mm" ? "my" : (lang === "en" ? "en" : "zh");
-
-    const fields = ["navHome", "navRates", "navTools", "navAds", "navContact", 
-                    "heroBtn1", "heroBtn2", "tickerLabel", "saveRatesBtn", "resetRatesBtn",
-                    "fromLabel", "currencyLabel", "costLabel", "shipLabel", "saleLabel"];
-    fields.forEach(id => { document.getElementById(id).textContent = t[id]; });
-
-    // 处理带有 HTML span 标签的标题
-    document.getElementById("heroTitle").innerHTML = t.heroTitle;
-    document.getElementById("ratesTitle").innerHTML = t.ratesTitle;
-    document.getElementById("toolsTitle").innerHTML = t.toolsTitle;
-    document.getElementById("adsTitle").innerHTML = t.adsTitle;
-    document.getElementById("contactTitle").innerHTML = t.contactTitle;
-
-    document.getElementById("heroDesc").textContent = t.heroDesc;
-    document.getElementById("ratesSub").textContent = t.ratesSub;
-    document.getElementById("toolsSub").textContent = t.toolsSub;
-    document.getElementById("adsSub").textContent = t.adsSub;
-    document.getElementById("contactSub").textContent = t.contactSub;
-    document.getElementById("editRatesTitle").innerHTML = "⚙️ " + t.editRatesTitle;
-    document.getElementById("convertTitle").innerHTML = "💱 " + t.convertTitle;
-    document.getElementById("profitTitle").innerHTML = "📈 " + t.profitTitle;
-    document.getElementById("convertNote").textContent = t.convertNote;
-    document.getElementById("profitNote").textContent = t.profitNote;
-
-    document.getElementById("rmbTitle").textContent = t.options[0] + " (RMB)";
-    document.getElementById("usdTitle").textContent = t.options[1] + " (USD)";
-    document.getElementById("thbTitle").textContent = t.options[2] + " (THB)";
-
-    if (!document.getElementById("noticeText").textContent || document.getElementById("noticeText").textContent.includes("加载")) {
-      document.getElementById("noticeText").textContent = t.notice;
-    }
-
-    const savedAt = localStorage.getItem("myanmarRateSavedAt");
-    document.getElementById("lastSaved").textContent = t.lastSavedPrefix + (savedAt || "—");
-  }
-
-  function unlockAdmin() {
-    const pass = document.getElementById("adminPass").value;
-    if (pass !== "admin123") { showToast("鉴权失败：口令不正确", "error"); return; }
-    
-    document.getElementById("adminContent").style.display = "block";
-    document.getElementById("noticeInput").value = document.getElementById("noticeText").textContent;
-    document.getElementById("ad1Input").value = document.getElementById("ad1").textContent;
-    document.getElementById("ad2Input").value = document.getElementById("ad2").textContent;
-    document.getElementById("ad3Input").value = document.getElementById("ad3").textContent;
-    showToast("欢迎进入站长控制台", "success");
-    document.getElementById("adminPass").value = "";
-  }
-
-  async function saveAllSiteData() {
-    const notice = document.getElementById("noticeInput").value || "";
-    const ad1 = document.getElementById("ad1Input").value || "Available Soon";
-    const ad2 = document.getElementById("ad2Input").value || "Available Soon";
-    const ad3 = document.getElementById("ad3Input").value || "Available Soon";
-
-    document.getElementById("noticeText").textContent = notice;
-    document.getElementById("ad1").textContent = ad1;
-    document.getElementById("ad2").textContent = ad2;
-    document.getElementById("ad3").textContent = ad3;
-    saveLocalBackup();
-
-    if (sb) {
-      try {
-        await sb.from("site_settings").upsert([
-          { key: "notice", value: notice }, { key: "ad1", value: ad1 },
-          { key: "ad2", value: ad2 }, { key: "ad3", value: ad3 }
-        ]);
-        showToast("广告与公告配置已发布至全网", "success");
-      } catch (e) {
-        showToast("网络同步异常，本地配置已保留", "error");
-      }
-    } else {
-      showToast("配置已保存在本地", "success");
-    }
-  }
-
-  function trackVisitors() {
-    let count = Number(localStorage.getItem("myanmarRateVisitors") || "1024");
-    count += Math.floor(Math.random() * 3) + 1; // 模拟流量增长
-    localStorage.setItem("myanmarRateVisitors", String(count));
-    document.getElementById("visitorText").textContent = "Total Visitors: " + count.toLocaleString();
-  }
-
-  window.addEventListener("load", async () => {
-    trackVisitors();
-    loadLocalBackup();
-    await loadRatesFromSupabase();
-    await loadSettingsFromSupabase();
-    
-    const lang = localStorage.getItem("myanmarRateLang") || "zh";
-    setLang(lang);
-    renderRates(); // 渲染并自动计算一次初始值
-  });
-</script>
+        // Initialize
+        window.onload = () => {
+            renderRates();
+            calculate();
+        };
+    </script>
 </body>
 </html>
