@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Myanmar Rate</title>
+<title>Myanmar Rate V1.1</title>
 
 <style>
 *{
@@ -25,8 +25,7 @@ align-items:center;
 padding:18px 30px;
 background:#111;
 border-bottom:1px solid #222;
-position:sticky;
-top:0;
+flex-wrap:wrap;
 }
 
 .logo{
@@ -38,8 +37,17 @@ color:#d4af37;
 nav a{
 color:#fff;
 text-decoration:none;
-margin-left:18px;
+margin-left:15px;
 font-size:14px;
+}
+
+.lang button{
+margin-left:8px;
+padding:6px 10px;
+background:#111;
+color:#d4af37;
+border:1px solid #d4af37;
+cursor:pointer;
 }
 
 .hero{
@@ -51,37 +59,26 @@ background:linear-gradient(180deg,#111,#0b0b0b);
 .hero h1{
 font-size:42px;
 color:#d4af37;
-margin-bottom:18px;
+margin-bottom:15px;
 }
 
 .hero p{
-font-size:18px;
 color:#bbb;
+font-size:18px;
 max-width:700px;
 margin:auto;
 line-height:1.6;
 }
 
-.btn{
-display:inline-block;
-margin-top:25px;
-padding:14px 28px;
-background:#d4af37;
-color:#000;
-text-decoration:none;
-font-weight:bold;
-border-radius:8px;
-}
-
 .section{
-max-width:1200px;
+max-width:1100px;
 margin:auto;
-padding:60px 20px;
+padding:55px 20px;
 }
 
 .title{
 text-align:center;
-font-size:32px;
+font-size:30px;
 color:#d4af37;
 margin-bottom:30px;
 }
@@ -101,7 +98,7 @@ text-align:center;
 }
 
 .card h3{
-margin-bottom:10px;
+margin-bottom:12px;
 color:#d4af37;
 }
 
@@ -110,13 +107,8 @@ font-size:34px;
 font-weight:bold;
 }
 
-.green{
-color:#00d26a;
-}
-
-.red{
-color:#ff5b5b;
-}
+.green{color:#00d26a;}
+.red{color:#ff5b5b;}
 
 input{
 width:100%;
@@ -134,9 +126,28 @@ padding:12px;
 margin-top:12px;
 background:#d4af37;
 border:none;
+color:#000;
 font-weight:bold;
 cursor:pointer;
 border-radius:6px;
+}
+
+.result{
+margin-top:15px;
+font-size:22px;
+color:#d4af37;
+font-weight:bold;
+}
+
+.contact a{
+display:block;
+background:#141414;
+padding:14px;
+margin-top:10px;
+text-decoration:none;
+color:#fff;
+border:1px solid #333;
+border-radius:8px;
 }
 
 footer{
@@ -147,8 +158,16 @@ border-top:1px solid #222;
 margin-top:50px;
 }
 </style>
-</head>
 
+<script>
+function convertRMB(){
+let rmb=document.getElementById("rmb").value;
+let result=rmb*610;
+document.getElementById("output").innerHTML=result.toLocaleString()+" MMK";
+}
+</script>
+
+</head>
 <body>
 
 <header>
@@ -161,18 +180,19 @@ margin-top:50px;
 <a href="#">Ads</a>
 <a href="#">Contact</a>
 </nav>
+
+<div class="lang">
+<button>中文</button>
+<button>EN</button>
+<button>မြန်မာ</button>
+</div>
 </header>
 
 <section class="hero">
 <h1>实时汇率 · 精准计算 · 助力生意</h1>
-
 <p>
-缅甸领先的智能汇率与贸易工具平台。
-实时查看人民币、美元、泰铢行情，
-帮助商人赚更多的钱。
+缅甸领先汇率与贸易平台，帮助商人掌握市场机会。
 </p>
-
-<a href="#" class="btn">立即开始</a>
 </section>
 
 <section class="section">
@@ -189,7 +209,7 @@ margin-top:50px;
 <div class="card">
 <h3>美元 USD</h3>
 <div class="rate">4210</div>
-<p class="red">▼ -15</p>
+<p class="red">▼ -12</p>
 </div>
 
 <div class="card">
@@ -202,11 +222,12 @@ margin-top:50px;
 </section>
 
 <section class="section">
-<h2 class="title">汇率换算器</h2>
+<h2 class="title">人民币换算器</h2>
 
 <div class="card">
-<input placeholder="输入人民币金额">
-<button>立即换算</button>
+<input type="number" id="rmb" placeholder="输入人民币金额">
+<button onclick="convertRMB()">立即换算</button>
+<div class="result" id="output">0 MMK</div>
 </div>
 </section>
 
@@ -233,8 +254,18 @@ margin-top:50px;
 </div>
 </section>
 
+<section class="section">
+<h2 class="title">联系我们投广告</h2>
+
+<div class="contact">
+<a href="#">Telegram 联系</a>
+<a href="#">Facebook 联系</a>
+<a href="#">WhatsApp 联系</a>
+</div>
+</section>
+
 <footer>
-© 2026 Myanmar Rate | Smart Exchange Platform
+© 2026 Myanmar Rate V1.1
 </footer>
 
 </body>
