@@ -1,243 +1,616 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Myanmar Rate V2.0</title>
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Myanmar Rate V3</title>
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
-}
+  :root{
+    --bg:#090909;
+    --panel:#141414;
+    --panel2:#101010;
+    --line:#242424;
+    --gold:#d4af37;
+    --text:#f2f2f2;
+    --muted:#a9a9a9;
+    --green:#00d26a;
+    --red:#ff5b5b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text)}
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(10,10,10,.96);
+    border-bottom:1px solid var(--line);
+    backdrop-filter:blur(10px);
+  }
+  .topbar{
+    max-width:1200px;margin:auto;
+    display:flex;align-items:center;justify-content:space-between;
+    gap:16px;padding:16px 20px;flex-wrap:wrap;
+  }
+  .brand{
+    display:flex;align-items:center;gap:12px;
+    color:var(--gold);font-weight:700;font-size:26px;
+  }
+  .brand .icon{font-size:28px}
+  nav{
+    display:flex;flex-wrap:wrap;gap:14px;align-items:center
+  }
+  nav a{
+    color:var(--text);text-decoration:none;font-size:14px;
+    padding:8px 10px;border-radius:8px;transition:.2s;
+  }
+  nav a:hover{background:#1a1a1a;color:var(--gold)}
+  .lang{
+    display:flex;gap:8px;flex-wrap:wrap
+  }
+  .lang button,.ghost-btn,.primary-btn,.small-btn{
+    border:1px solid var(--gold);
+    background:#111;color:var(--gold);
+    padding:9px 12px;border-radius:10px;
+    cursor:pointer;font-weight:700;
+  }
+  .lang button.active{background:var(--gold);color:#000}
+  .hero{
+    max-width:1200px;margin:auto;
+    padding:72px 20px 40px;
+    text-align:center;
+  }
+  .hero h1{
+    color:var(--gold);
+    font-size:clamp(34px,6vw,54px);
+    line-height:1.08;margin-bottom:16px;
+  }
+  .hero p{
+    color:var(--muted);
+    max-width:820px;margin:0 auto 24px;
+    font-size:18px;line-height:1.7;
+  }
+  .hero-actions{
+    display:flex;justify-content:center;gap:12px;flex-wrap:wrap
+  }
+  .primary-btn{
+    background:var(--gold);color:#000;border:none
+  }
+  .ghost-btn{
+    background:transparent;color:var(--text)
+  }
 
-body{
-background:#0b0b0b;
-color:#fff;
-}
+  .section{
+    max-width:1200px;margin:auto;
+    padding:26px 20px 0;
+  }
+  .section h2{
+    color:var(--gold);font-size:32px;text-align:center;
+    margin:22px 0 24px;
+  }
+  .sub{
+    text-align:center;color:var(--muted);margin-top:-10px;margin-bottom:22px
+  }
 
-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:18px 25px;
-background:#111;
-border-bottom:1px solid #222;
-flex-wrap:wrap;
-}
-
-.logo{
-font-size:28px;
-font-weight:bold;
-color:#d4af37;
-}
-
-nav a{
-color:#fff;
-text-decoration:none;
-margin-left:15px;
-font-size:14px;
-cursor:pointer;
-}
-
-nav a:hover{
-color:#d4af37;
-}
-
-.lang button{
-margin-left:8px;
-padding:6px 10px;
-background:#111;
-color:#d4af37;
-border:1px solid #d4af37;
-cursor:pointer;
-border-radius:6px;
-}
-
-section{
-max-width:1000px;
-margin:auto;
-padding:60px 20px;
-}
-
-h1{
-text-align:center;
-font-size:42px;
-color:#d4af37;
-margin-bottom:15px;
-}
-
-p{
-text-align:center;
-color:#bbb;
-margin-bottom:35px;
-}
-
-.card{
-background:#141414;
-padding:25px;
-border-radius:12px;
-border:1px solid #222;
-margin-bottom:20px;
-}
-
-input{
-width:100%;
-padding:12px;
-margin-top:10px;
-background:#0d0d0d;
-border:1px solid #333;
-color:#fff;
-border-radius:8px;
-}
-
-button.action{
-width:100%;
-padding:12px;
-margin-top:12px;
-background:#d4af37;
-border:none;
-font-weight:bold;
-cursor:pointer;
-border-radius:8px;
-color:#000;
-}
-
-.result{
-margin-top:15px;
-font-size:24px;
-color:#d4af37;
-font-weight:bold;
-text-align:center;
-}
-
-.quick{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:18px;
-}
-
-.box{
-background:#141414;
-padding:20px;
-border-radius:12px;
-text-align:center;
-border:1px solid #222;
-}
-
-footer{
-text-align:center;
-padding:30px;
-color:#666;
-border-top:1px solid #222;
-margin-top:40px;
-}
+  .grid{
+    display:grid;gap:18px;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  }
+  .card{
+    background:linear-gradient(180deg,var(--panel),var(--panel2));
+    border:1px solid var(--line);
+    border-radius:16px;padding:20px;
+    box-shadow:0 8px 20px rgba(0,0,0,.18);
+  }
+  .card h3{color:var(--gold);margin-bottom:8px;font-size:18px}
+  .rate{
+    font-size:34px;font-weight:800;margin:8px 0 4px;
+    letter-spacing:.2px;
+  }
+  .up{color:var(--green);font-weight:700}
+  .down{color:var(--red);font-weight:700}
+  .muted{color:var(--muted)}
+  .row{
+    display:grid;gap:14px;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  }
+  input,select{
+    width:100%;margin-top:10px;
+    background:#0d0d0d;color:#fff;
+    border:1px solid #333;border-radius:10px;
+    padding:12px 12px;font-size:15px;
+  }
+  .btn{
+    width:100%;margin-top:12px;
+    background:var(--gold);color:#000;border:none;
+    border-radius:10px;padding:12px 14px;
+    cursor:pointer;font-weight:800;font-size:15px;
+  }
+  .btn.secondary{
+    background:transparent;color:var(--text);border:1px solid #444
+  }
+  .result{
+    margin-top:14px;padding:14px;border-radius:12px;
+    background:#0f0f0f;border:1px solid #262626;
+    font-size:18px;font-weight:800;color:var(--gold);
+  }
+  .split{
+    display:grid;gap:18px;
+    grid-template-columns:1.2fr .8fr;
+    align-items:start;
+  }
+  @media (max-width:900px){
+    .split{grid-template-columns:1fr}
+  }
+  .adbox{
+    min-height:130px;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    text-align:center;border:1.5px dashed #444;border-radius:16px;
+    padding:22px;background:#0f0f0f;color:#cfcfcf
+  }
+  .adbox strong{color:var(--gold);font-size:18px;margin-bottom:8px}
+  .contact-grid{
+    display:grid;gap:14px;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  }
+  .contact-link{
+    display:block;text-decoration:none;
+    color:var(--text);background:#111;border:1px solid #333;
+    padding:15px;border-radius:12px;text-align:center;font-weight:700;
+  }
+  .contact-link:hover{border-color:var(--gold);color:var(--gold)}
+  .mini{
+    font-size:13px;color:var(--muted);margin-top:8px
+  }
+  .footer{
+    max-width:1200px;margin:40px auto 0;
+    padding:26px 20px 40px;color:#666;
+    border-top:1px solid var(--line);text-align:center
+  }
+  .pill{
+    display:inline-block;border:1px solid #333;border-radius:999px;
+    padding:7px 12px;margin:6px 6px 0 0;color:#ddd;background:#101010
+  }
+  .stack{display:flex;flex-wrap:wrap;justify-content:center;margin-top:8px}
 </style>
-
-<script>
-let lang="zh";
-
-function convert(){
-let val=parseFloat(document.getElementById("rmb").value||0);
-let result=val*610;
-document.getElementById("result").innerHTML=result.toLocaleString()+" MMK";
-}
-
-function goTop(){
-window.scrollTo({top:0,behavior:"smooth"});
-}
-
-function contact(){
-window.location.href="mailto:your@email.com";
-}
-
-function setLang(type){
-lang=type;
-
-if(type==="zh"){
-document.getElementById("title").innerHTML="实时汇率 · 精准计算 · 助力生意";
-document.getElementById("desc").innerHTML="缅甸领先的智能汇率平台";
-}
-
-if(type==="en"){
-document.getElementById("title").innerHTML="Live Rates · Smart Tools · Grow Business";
-document.getElementById("desc").innerHTML="Myanmar Smart Exchange Platform";
-}
-
-if(type==="mm"){
-document.getElementById("title").innerHTML="ငွေလဲနှုန်း တိုက်ရိုက် · စီးပွားရေးအကူအညီ";
-document.getElementById("desc").innerHTML="မြန်မာနိုင်ငံ ငွေလဲပလက်ဖောင်း";
-}
-}
-</script>
-
 </head>
-
 <body>
-
 <header>
-<div class="logo">🛕 Myanmar Rate</div>
-
-<nav>
-<a onclick="goTop()">Home</a>
-<a onclick="goTop()">Rates</a>
-<a onclick="goTop()">Tools</a>
-<a onclick="contact()">Contact</a>
-</nav>
-
-<div class="lang">
-<button onclick="setLang('zh')">中文</button>
-<button onclick="setLang('en')">EN</button>
-<button onclick="setLang('mm')">မြန်မာ</button>
-</div>
+  <div class="topbar">
+    <div class="brand"><span class="icon">🛕</span><span id="brandText">Myanmar Rate</span></div>
+    <nav>
+      <a href="#home" id="navHome">Home</a>
+      <a href="#rates" id="navRates">Rates</a>
+      <a href="#tools" id="navTools">Tools</a>
+      <a href="#ads" id="navAds">Ads</a>
+      <a href="#contact" id="navContact">Contact</a>
+    </nav>
+    <div class="lang">
+      <button id="btnZh" onclick="setLang('zh')">中文</button>
+      <button id="btnEn" onclick="setLang('en')">EN</button>
+      <button id="btnMm" onclick="setLang('mm')">မြန်မာ</button>
+    </div>
+  </div>
 </header>
 
-<section>
-
-<h1 id="title">实时汇率 · 精准计算 · 助力生意</h1>
-<p id="desc">缅甸领先的智能汇率平台</p>
-
-<div class="quick">
-
-<div class="box">
-<h3>RMB</h3>
-<p>610 MMK</p>
-</div>
-
-<div class="box">
-<h3>USD</h3>
-<p>4210 MMK</p>
-</div>
-
-<div class="box">
-<h3>THB</h3>
-<p>115 MMK</p>
-</div>
-
-</div>
-
-<div class="card">
-<h2>人民币换算器</h2>
-
-<input type="number" id="rmb" placeholder="输入人民币金额">
-
-<button class="action" onclick="convert()">立即换算</button>
-
-<div class="result" id="result">0 MMK</div>
-</div>
-
-<div class="card">
-<h2>商务合作</h2>
-<button class="action" onclick="contact()">联系广告合作</button>
-</div>
-
+<section class="hero" id="home">
+  <h1 id="heroTitle">实时汇率 · 精准计算 · 助力生意</h1>
+  <p id="heroDesc">缅甸智能汇率与贸易工具平台。查看市场价格、快速换算、计算利润，让商人更快做决定。</p>
+  <div class="hero-actions">
+    <a class="primary-btn" href="#rates" id="heroBtn1">立即查看汇率</a>
+    <a class="ghost-btn" href="#contact" id="heroBtn2">商务合作</a>
+  </div>
+  <div class="stack">
+    <span class="pill">RMB / MMK</span>
+    <span class="pill">USD / MMK</span>
+    <span class="pill">THB / MMK</span>
+    <span class="pill">Multi-language</span>
+  </div>
 </section>
 
-<footer>
-© 2026 Myanmar Rate V2.0
-</footer>
+<section class="section" id="rates">
+  <h2 id="ratesTitle">今日汇率</h2>
+  <p class="sub" id="ratesSub">可手动修改并保存到本地，后续可接入真实 API。</p>
 
+  <div class="grid">
+    <div class="card">
+      <h3 id="rmbTitle">人民币 RMB</h3>
+      <div class="rate" id="rmbRate">610</div>
+      <div class="up" id="rmbChange">▲ +5 Today</div>
+    </div>
+    <div class="card">
+      <h3 id="usdTitle">美元 USD</h3>
+      <div class="rate" id="usdRate">4210</div>
+      <div class="down" id="usdChange">▼ -12 Today</div>
+    </div>
+    <div class="card">
+      <h3 id="thbTitle">泰铢 THB</h3>
+      <div class="rate" id="thbRate">115</div>
+      <div class="up" id="thbChange">▲ +1 Today</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <h3 id="editRatesTitle">手动更新汇率</h3>
+    <div class="row">
+      <div>
+        <label class="muted">RMB → MMK</label>
+        <input type="number" id="inputRMB" value="610">
+      </div>
+      <div>
+        <label class="muted">USD → MMK</label>
+        <input type="number" id="inputUSD" value="4210">
+      </div>
+      <div>
+        <label class="muted">THB → MMK</label>
+        <input type="number" id="inputTHB" value="115">
+      </div>
+    </div>
+    <button class="btn" onclick="saveRates()" id="saveRatesBtn">保存汇率</button>
+    <button class="btn secondary" onclick="resetRates()" id="resetRatesBtn">恢复默认</button>
+    <div class="mini" id="lastSaved">最后更新：—</div>
+  </div>
+</section>
+
+<section class="section" id="tools">
+  <h2 id="toolsTitle">智能工具</h2>
+  <p class="sub" id="toolsSub">换算器、利润计算器，都是可直接使用的功能。</p>
+
+  <div class="split">
+    <div class="card">
+      <h3 id="convertTitle">汇率换算器</h3>
+      <div class="row">
+        <div>
+          <label class="muted" id="fromLabel">输入金额</label>
+          <input type="number" id="amount" placeholder="100">
+        </div>
+        <div>
+          <label class="muted" id="currencyLabel">币种</label>
+          <select id="currency">
+            <option value="RMB">RMB</option>
+            <option value="USD">USD</option>
+            <option value="THB">THB</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="convert()" id="convertBtn">立即换算</button>
+      <div class="result" id="convertResult">0 MMK</div>
+      <div class="mini" id="convertNote">根据当前汇率自动计算。</div>
+    </div>
+
+    <div class="card">
+      <h3 id="profitTitle">贸易利润计算器</h3>
+      <label class="muted" id="costLabel">商品成本（RMB）</label>
+      <input type="number" id="costRMB" placeholder="500">
+
+      <label class="muted" id="shipLabel">运费（MMK）</label>
+      <input type="number" id="shippingMMK" placeholder="100000">
+
+      <label class="muted" id="saleLabel">售价（MMK）</label>
+      <input type="number" id="saleMMK" placeholder="550000">
+
+      <button class="btn" onclick="calcProfit()" id="profitBtn">计算利润</button>
+      <div class="result" id="profitResult">利润：—</div>
+      <div class="mini" id="profitNote">适合商家快速判断是否赚钱。</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="ads">
+  <h2 id="adsTitle">黄金广告位</h2>
+  <p class="sub" id="adsSub">先保留位置，后面有广告主可以直接替换。</p>
+
+  <div class="grid">
+    <div class="adbox">
+      <strong>Premium Banner Space</strong>
+      <div id="ad1">Available Soon</div>
+      <div class="mini">Top visibility on homepage</div>
+    </div>
+    <div class="adbox">
+      <strong>Featured Sponsor Slot</strong>
+      <div id="ad2">Available Soon</div>
+      <div class="mini">High-value sponsor placement</div>
+    </div>
+    <div class="adbox">
+      <strong>Business Promotion Space</strong>
+      <div id="ad3">Available Soon</div>
+      <div class="mini">Best for logistics / remittance</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contact">
+  <h2 id="contactTitle">联系我们</h2>
+  <p class="sub" id="contactSub">联系方式先留空，后续可接 Telegram / Facebook / WhatsApp。</p>
+
+  <div class="contact-grid">
+    <a class="contact-link" href="#" onclick="return false;">Telegram — Coming Soon</a>
+    <a class="contact-link" href="#" onclick="return false;">Facebook — Coming Soon</a>
+    <a class="contact-link" href="#" onclick="return false;">WhatsApp — Coming Soon</a>
+  </div>
+</section>
+
+<div class="footer">
+  <div id="footerText">© 2026 Myanmar Rate V3 | Smart Exchange Platform</div>
+</div>
+
+<script>
+  const defaultRates = { RMB: 610, USD: 4210, THB: 115 };
+  let rates = loadRates();
+
+  const texts = {
+    zh: {
+      brand: "Myanmar Rate",
+      navHome: "Home",
+      navRates: "Rates",
+      navTools: "Tools",
+      navAds: "Ads",
+      navContact: "Contact",
+      heroTitle: "实时汇率 · 精准计算 · 助力生意",
+      heroDesc: "缅甸智能汇率与贸易工具平台。查看市场价格、快速换算、计算利润，让商人更快做决定。",
+      heroBtn1: "立即查看汇率",
+      heroBtn2: "商务合作",
+      ratesTitle: "今日汇率",
+      ratesSub: "可手动修改并保存到本地，后续可接入真实 API。",
+      editRatesTitle: "手动更新汇率",
+      saveRatesBtn: "保存汇率",
+      resetRatesBtn: "恢复默认",
+      lastSavedPrefix: "最后更新：",
+      toolsTitle: "智能工具",
+      toolsSub: "换算器、利润计算器，都是可直接使用的功能。",
+      convertTitle: "汇率换算器",
+      fromLabel: "输入金额",
+      currencyLabel: "币种",
+      convertBtn: "立即换算",
+      convertNote: "根据当前汇率自动计算。",
+      profitTitle: "贸易利润计算器",
+      costLabel: "商品成本（RMB）",
+      shipLabel: "运费（MMK）",
+      saleLabel: "售价（MMK）",
+      profitBtn: "计算利润",
+      profitNote: "适合商家快速判断是否赚钱。",
+      adsTitle: "黄金广告位",
+      adsSub: "先保留位置，后面有广告主可以直接替换。",
+      contactTitle: "联系我们",
+      contactSub: "联系方式先留空，后续可接 Telegram / Facebook / WhatsApp。",
+      footerText: "© 2026 Myanmar Rate V3 | Smart Exchange Platform",
+      options: ["RMB", "USD", "THB"]
+    },
+    en: {
+      brand: "Myanmar Rate",
+      navHome: "Home",
+      navRates: "Rates",
+      navTools: "Tools",
+      navAds: "Ads",
+      navContact: "Contact",
+      heroTitle: "Live Rates · Smart Tools · Grow Business",
+      heroDesc: "Myanmar exchange and trade tools platform. Check market prices, convert quickly, and calculate profit faster.",
+      heroBtn1: "View Rates",
+      heroBtn2: "Business",
+      ratesTitle: "Today’s Rates",
+      ratesSub: "You can edit and save rates locally. API integration can be added later.",
+      editRatesTitle: "Manual Rate Update",
+      saveRatesBtn: "Save Rates",
+      resetRatesBtn: "Restore Default",
+      lastSavedPrefix: "Last updated: ",
+      toolsTitle: "Smart Tools",
+      toolsSub: "Converter and profit calculator are fully usable.",
+      convertTitle: "Currency Converter",
+      fromLabel: "Amount",
+      currencyLabel: "Currency",
+      convertBtn: "Convert Now",
+      convertNote: "Automatically calculated using the current rate.",
+      profitTitle: "Trade Profit Calculator",
+      costLabel: "Product Cost (RMB)",
+      shipLabel: "Shipping (MMK)",
+      saleLabel: "Sale Price (MMK)",
+      profitBtn: "Calculate Profit",
+      profitNote: "Helps merchants judge profit quickly.",
+      adsTitle: "Premium Ad Space",
+      adsSub: "Keep the slots ready and replace them when advertisers arrive.",
+      contactTitle: "Contact Us",
+      contactSub: "Contact methods are left blank for now; Telegram / Facebook / WhatsApp can be added later.",
+      footerText: "© 2026 Myanmar Rate V3 | Smart Exchange Platform",
+      options: ["RMB", "USD", "THB"]
+    },
+    mm: {
+      brand: "Myanmar Rate",
+      navHome: "ပင်မ",
+      navRates: "ငွေလဲနှုန်း",
+      navTools: "ကိရိယာများ",
+      navAds: "ကြော်ငြာ",
+      navContact: "ဆက်သွယ်ရန်",
+      heroTitle: "တိုက်ရိုက် ငွေလဲနှုန်း · စမတ်ကိရိယာများ · စီးပွားရေးတိုးတက်ရေး",
+      heroDesc: "မြန်မာနိုင်ငံ၏ ငွေလဲနှုန်းနှင့် ကုန်သွယ်ရေး ကိရိယာ ပလက်ဖောင်း။ စျေးနှုန်းကြည့်၊ တွက်ချက်၊ အမြတ်တွက်ပြီး မြန်မြန်ဆုံးဖြတ်နိုင်သည်။",
+      heroBtn1: "နှုန်းကြည့်မည်",
+      heroBtn2: "လုပ်ငန်းဆက်သွယ်",
+      ratesTitle: "ယနေ့ ငွေလဲနှုန်း",
+      ratesSub: "လက်ရှိတန်ဖိုးကို လက်ဖြင့်ပြင်နိုင်ပြီး သိမ်းထားနိုင်သည်။ နောက်ပိုင်း API ချိတ်နိုင်သည်။",
+      editRatesTitle: "လက်ဖြင့် နှုန်းပြင်ရန်",
+      saveRatesBtn: "သိမ်းမည်",
+      resetRatesBtn: "မူလသို့ပြန်မည်",
+      lastSavedPrefix: "နောက်ဆုံးပြင်ဆင်ချိန်：",
+      toolsTitle: "စမတ်ကိရိယာများ",
+      toolsSub: "တွက်စက်များကို တိုက်ရိုက်အသုံးပြုနိုင်သည်။",
+      convertTitle: "ငွေလဲတွက်စက်",
+      fromLabel: "ပမာဏ",
+      currencyLabel: "ငွေကြေး",
+      convertBtn: "တွက်မည်",
+      convertNote: "လက်ရှိနှုန်းဖြင့် အလိုအလျောက် တွက်ပေးသည်။",
+      profitTitle: "အမြတ်တွက်စက်",
+      costLabel: "ကုန်ကျစရိတ် (RMB)",
+      shipLabel: "ပို့ဆောင်ခ (MMK)",
+      saleLabel: "ရောင်းဈေး (MMK)",
+      profitBtn: "အမြတ်တွက်မည်",
+      profitNote: "အမြတ်ရှိမရှိ အမြန်စစ်ဆေးနိုင်သည်။",
+      adsTitle: "ကြော်ငြာနေရာ",
+      adsSub: "အခုတော့ နေရာသိမ်းထားပြီး နောက်မှကြော်ငြာထည့်နိုင်သည်။",
+      contactTitle: "ဆက်သွယ်ရန်",
+      contactSub: "Telegram / Facebook / WhatsApp ကို နောက်ပိုင်းထည့်နိုင်ရန် အခုလွတ်ထားသည်။",
+      footerText: "© 2026 Myanmar Rate V3 | Smart Exchange Platform",
+      options: ["RMB", "USD", "THB"]
+    }
+  };
+
+  function loadRates(){
+    try{
+      const saved = localStorage.getItem("myanmarRateRates");
+      return saved ? JSON.parse(saved) : {...defaultRates};
+    }catch(e){
+      return {...defaultRates};
+    }
+  }
+
+  function saveRatesToStorage(){
+    localStorage.setItem("myanmarRateRates", JSON.stringify(rates));
+  }
+
+  function formatNumber(n){
+    return Number(n).toLocaleString();
+  }
+
+  function syncRatesUI(){
+    document.getElementById("rmbRate").textContent = formatNumber(rates.RMB);
+    document.getElementById("usdRate").textContent = formatNumber(rates.USD);
+    document.getElementById("thbRate").textContent = formatNumber(rates.THB);
+    document.getElementById("inputRMB").value = rates.RMB;
+    document.getElementById("inputUSD").value = rates.USD;
+    document.getElementById("inputTHB").value = rates.THB;
+  }
+
+  function saveRates(){
+    const rmb = parseFloat(document.getElementById("inputRMB").value || 0);
+    const usd = parseFloat(document.getElementById("inputUSD").value || 0);
+    const thb = parseFloat(document.getElementById("inputTHB").value || 0);
+
+    if(rmb <= 0 || usd <= 0 || thb <= 0){
+      alert("Please enter valid rates.");
+      return;
+    }
+
+    rates = { RMB: rmb, USD: usd, THB: thb };
+    saveRatesToStorage();
+    syncRatesUI();
+    document.getElementById("lastSaved").textContent =
+      getText("lastSavedPrefix") + new Date().toLocaleString();
+  }
+
+  function resetRates(){
+    rates = {...defaultRates};
+    saveRatesToStorage();
+    syncRatesUI();
+    document.getElementById("lastSaved").textContent =
+      getText("lastSavedPrefix") + new Date().toLocaleString();
+  }
+
+  function convert(){
+    const amount = parseFloat(document.getElementById("amount").value || 0);
+    const currency = document.getElementById("currency").value;
+    const mmk = amount * (rates[currency] || 0);
+    document.getElementById("convertResult").textContent =
+      `${formatNumber(mmk)} MMK`;
+  }
+
+  function calcProfit(){
+    const costRMB = parseFloat(document.getElementById("costRMB").value || 0);
+    const shipping = parseFloat(document.getElementById("shippingMMK").value || 0);
+    const sale = parseFloat(document.getElementById("saleMMK").value || 0);
+
+    const costMMK = costRMB * rates.RMB;
+    const totalCost = costMMK + shipping;
+    const profit = sale - totalCost;
+    const margin = sale > 0 ? (profit / sale) * 100 : 0;
+
+    const status = profit >= 0 ? "Profit" : "Loss";
+    document.getElementById("profitResult").textContent =
+      `${status}: ${formatNumber(Math.abs(profit))} MMK (${margin.toFixed(1)}%)`;
+  }
+
+  function contact(){
+    alert("Contact links are left blank for now. Replace them later with Telegram / Facebook / WhatsApp.");
+  }
+
+  function getText(key){
+    const lang = localStorage.getItem("myanmarRateLang") || "zh";
+    return texts[lang][key];
+  }
+
+  function setLang(lang){
+    localStorage.setItem("myanmarRateLang", lang);
+    document.getElementById("btnZh").classList.toggle("active", lang === "zh");
+    document.getElementById("btnEn").classList.toggle("active", lang === "en");
+    document.getElementById("btnMm").classList.toggle("active", lang === "mm");
+
+    const t = texts[lang];
+
+    document.documentElement.lang = lang === "mm" ? "my" : (lang === "en" ? "en" : "zh");
+    document.getElementById("brandText").textContent = t.brand;
+    document.getElementById("navHome").textContent = t.navHome;
+    document.getElementById("navRates").textContent = t.navRates;
+    document.getElementById("navTools").textContent = t.navTools;
+    document.getElementById("navAds").textContent = t.navAds;
+    document.getElementById("navContact").textContent = t.navContact;
+
+    document.getElementById("heroTitle").textContent = t.heroTitle;
+    document.getElementById("heroDesc").textContent = t.heroDesc;
+    document.getElementById("heroBtn1").textContent = t.heroBtn1;
+    document.getElementById("heroBtn2").textContent = t.heroBtn2;
+
+    document.getElementById("ratesTitle").textContent = t.ratesTitle;
+    document.getElementById("ratesSub").textContent = t.ratesSub;
+    document.getElementById("rmbTitle").textContent = t.options[0] + " RMB";
+    document.getElementById("usdTitle").textContent = t.options[1] + " USD";
+    document.getElementById("thbTitle").textContent = t.options[2] + " THB";
+    document.getElementById("editRatesTitle").textContent = t.editRatesTitle;
+    document.getElementById("saveRatesBtn").textContent = t.saveRatesBtn;
+    document.getElementById("resetRatesBtn").textContent = t.resetRatesBtn;
+    document.getElementById("lastSaved").textContent = t.lastSavedPrefix + (document.getElementById("lastSaved").textContent.split("：")[1] || "—");
+
+    document.getElementById("toolsTitle").textContent = t.toolsTitle;
+    document.getElementById("toolsSub").textContent = t.toolsSub;
+    document.getElementById("convertTitle").textContent = t.convertTitle;
+    document.getElementById("fromLabel").textContent = t.fromLabel;
+    document.getElementById("currencyLabel").textContent = t.currencyLabel;
+    document.getElementById("convertBtn").textContent = t.convertBtn;
+    document.getElementById("convertNote").textContent = t.convertNote;
+    document.getElementById("profitTitle").textContent = t.profitTitle;
+    document.getElementById("costLabel").textContent = t.costLabel;
+    document.getElementById("shipLabel").textContent = t.shipLabel;
+    document.getElementById("saleLabel").textContent = t.saleLabel;
+    document.getElementById("profitBtn").textContent = t.profitBtn;
+    document.getElementById("profitNote").textContent = t.profitNote;
+
+    document.getElementById("adsTitle").textContent = t.adsTitle;
+    document.getElementById("adsSub").textContent = t.adsSub;
+    document.getElementById("contactTitle").textContent = t.contactTitle;
+    document.getElementById("contactSub").textContent = t.contactSub;
+    document.getElementById("footerText").textContent = t.footerText;
+
+    syncRatesUI();
+  }
+
+  window.addEventListener("load", () => {
+    syncRatesUI();
+    const lang = localStorage.getItem("myanmarRateLang") || "zh";
+    setLang(lang);
+    document.getElementById("lastSaved").textContent =
+      getText("lastSavedPrefix") + (localStorage.getItem("myanmarRateSavedAt") || "—");
+  });
+
+  const originalSaveRates = saveRates;
+  saveRates = function(){
+    const rmb = parseFloat(document.getElementById("inputRMB").value || 0);
+    const usd = parseFloat(document.getElementById("inputUSD").value || 0);
+    const thb = parseFloat(document.getElementById("inputTHB").value || 0);
+    if(rmb <= 0 || usd <= 0 || thb <= 0){
+      alert("Please enter valid rates.");
+      return;
+    }
+    rates = { RMB: rmb, USD: usd, THB: thb };
+    localStorage.setItem("myanmarRateRates", JSON.stringify(rates));
+    localStorage.setItem("myanmarRateSavedAt", new Date().toLocaleString());
+    syncRatesUI();
+    document.getElementById("lastSaved").textContent =
+      getText("lastSavedPrefix") + localStorage.getItem("myanmarRateSavedAt");
+  }
+</script>
 </body>
 </html>
