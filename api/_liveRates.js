@@ -6,14 +6,22 @@ async function fetchLiveRates() {
   const r = data.rates || {};
   if (!r.USD || !r.THB || !r.CNY) throw new Error('Missing required live pairs');
 
-  const usd = 1 / r.USD;
-  const thb = r.THB / r.USD ? usd / (1 / r.THB) : 1 / r.THB;
-  const cny = 1 / r.CNY;
+  const officialUsd = 1 / r.USD;
+  const officialThb = 1 / r.THB;
+  const officialCny = 1 / r.CNY;
+
+  const usdMultiplier = Number(process.env.USD_MARKET_MULTIPLIER || 2.0);
+  const thbMultiplier = Number(process.env.THB_MARKET_MULTIPLIER || 2.0);
+  const cnyMultiplier = Number(process.env.CNY_MARKET_MULTIPLIER || 2.0);
+
+  const usd = officialUsd * usdMultiplier;
+  const thb = officialThb * thbMultiplier;
+  const cny = officialCny * cnyMultiplier;
 
   return {
-    usd: { name: 'USD', full: 'US Dollar', value: Math.round(usd), change: 0, trend: 'up', spread: 0 },
-    thb: { name: 'THB', full: 'Thai Baht', value: Math.round(1 / r.THB), change: 0, trend: 'up', spread: 0 },
-    rmb: { name: 'RMB', full: 'Chinese Yuan', value: Math.round(cny), change: 0, trend: 'up', spread: 0 }
+    usd: { name: 'USD', full: 'US Dollar', value: Math.round(usd), change: 0, trend: 'up', spread: 25 },
+    thb: { name: 'THB', full: 'Thai Baht', value: Math.round(thb), change: 0, trend: 'up', spread: 2 },
+    rmb: { name: 'RMB', full: 'Chinese Yuan', value: Math.round(cny), change: 0, trend: 'up', spread: 6 }
   };
 }
 
