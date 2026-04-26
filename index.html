@@ -2,255 +2,45 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Myanmar Rate v2.0 PRO</title>
-<meta name="description" content="Myanmar live exchange rates USD RMB THB">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Myanmar Rate v4.0 Ultimate - Live MMK Exchange Rates</title>
+<meta name="description" content="Myanmar Rate v4.0 Ultimate: professional Myanmar market exchange rates for USD, RMB, THB, USDT and SGD to MMK.">
+<meta name="theme-color" content="#0b0e11">
 <style>
-:root{
---bg:#0b0e11;
---card:#181a20;
---gold:#f0b90b;
---text:#fff;
---sub:#9aa4af;
---green:#0ecb81;
---red:#f6465d;
---line:#2b3139;
-}
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-body{background:var(--bg);color:var(--text)}
-header{
-display:flex;justify-content:space-between;align-items:center;
-padding:18px 20px;border-bottom:1px solid var(--line);
-position:sticky;top:0;background:#0b0e11ee;backdrop-filter:blur(8px);z-index:99;
-}
-.logo{font-size:26px;font-weight:900;color:var(--gold)}
-.lang button{
-margin-left:6px;padding:8px 12px;border:none;border-radius:8px;
-background:var(--card);color:#fff;cursor:pointer
-}
-.hero{text-align:center;padding:40px 20px}
-.hero h1{font-size:36px;margin-bottom:10px}
-.hero p{color:var(--sub)}
-.wrap{max-width:1100px;margin:auto;padding:20px}
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:16px;
-}
-.card{
-background:var(--card);
-border:1px solid var(--line);
-padding:18px;
-border-radius:16px;
-}
-.pair{color:var(--sub);margin-bottom:10px}
-.price{font-size:34px;font-weight:900}
-.up{color:var(--green)}
-.down{color:var(--red)}
-.change{margin-top:8px;font-size:14px}
-.chart{
-height:70px;display:flex;align-items:flex-end;gap:5px;margin-top:15px
-}
-.bar{flex:1;background:var(--gold);border-radius:4px 4px 0 0}
-.title{
-font-size:24px;font-weight:800;margin:35px 0 16px
-}
-.calcBox{
-background:var(--card);
-border:1px solid var(--line);
-padding:20px;border-radius:16px;
-}
-.row{
-display:grid;grid-template-columns:1fr 160px;gap:10px
-}
-input,select{
-padding:14px;background:#0b0e11;color:#fff;border:1px solid var(--line);
-border-radius:10px;font-size:18px;width:100%;
-}
-.result{
-margin-top:16px;font-size:30px;font-weight:900;color:var(--gold)
-}
-.admin{
-position:fixed;right:18px;bottom:18px;
-background:var(--gold);color:#000;font-weight:900;
-width:54px;height:54px;border-radius:50%;
-display:flex;align-items:center;justify-content:center;
-cursor:pointer;font-size:24px;
-}
-#langModal{
-position:fixed;inset:0;background:#000000c8;
-display:flex;justify-content:center;align-items:center;z-index:999;
-}
-.modal{
-background:var(--card);padding:25px;border-radius:18px;
-width:90%;max-width:340px;text-align:center;
-}
-.modal h2{margin-bottom:16px}
-.modal button{
-width:100%;padding:14px;margin-top:10px;border:none;
-border-radius:10px;background:var(--gold);font-weight:800;cursor:pointer
-}
-footer{
-text-align:center;color:var(--sub);
-padding:30px;margin-top:40px;border-top:1px solid var(--line)
-}
-@media(max-width:700px){
-.hero h1{font-size:28px}
-.row{grid-template-columns:1fr}
-}
+:root{--bg:#07090d;--bg2:#0b0e11;--panel:#11151d;--card:#181a20;--card2:#0f131a;--gold:#f0b90b;--gold2:#f8d33a;--text:#f5f7fa;--sub:#9aa4af;--green:#0ecb81;--red:#f6465d;--line:#2b3139;--blue:#1e88ff;--shadow:0 20px 60px rgba(0,0,0,.45)}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,Arial,'Noto Sans Myanmar',sans-serif}body{background:radial-gradient(circle at top left,#1b2434 0,#07090d 36%,#050608 100%);color:var(--text);min-height:100vh}button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}.bgGlow{position:fixed;inset:-20%;background:radial-gradient(circle at 15% 20%,rgba(240,185,11,.18),transparent 30%),radial-gradient(circle at 85% 10%,rgba(30,136,255,.12),transparent 25%);pointer-events:none;z-index:-1}.topTicker{overflow:hidden;border-bottom:1px solid var(--line);background:#07090dcc;white-space:nowrap}.tickerTrack{display:inline-flex;gap:35px;padding:9px 0;animation:ticker 24s linear infinite}.tickerItem{font-size:13px;color:var(--sub)}.tickerItem b{color:#fff;margin-right:8px}.tickerItem .up{color:var(--green)}.tickerItem .down{color:var(--red)}@keyframes ticker{from{transform:translateX(0)}to{transform:translateX(-50%)}}header{position:sticky;top:0;z-index:99;display:flex;justify-content:space-between;align-items:center;padding:16px 22px;background:rgba(7,9,13,.82);backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.07)}.brand{display:flex;align-items:center;gap:12px}.mark{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--gold),#8a6500);color:#000;display:grid;place-items:center;font-weight:1000;box-shadow:0 0 30px rgba(240,185,11,.25)}.logo{font-size:22px;font-weight:1000}.badge{font-size:11px;color:#000;background:var(--gold);padding:3px 7px;border-radius:99px;margin-left:6px}.nav{display:flex;gap:8px;align-items:center}.btn{border:1px solid var(--line);background:var(--card);color:#fff;border-radius:12px;padding:10px 13px;font-weight:800}.btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;border:none}.btn.ghost{background:transparent}.hero{max-width:1180px;margin:0 auto;padding:55px 18px 25px;display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center}.hero h1{font-size:clamp(34px,6vw,68px);line-height:.98;font-weight:1000;letter-spacing:-2px}.hero p{color:var(--sub);font-size:17px;margin:18px 0 24px;line-height:1.7}.heroActions{display:flex;gap:12px;flex-wrap:wrap}.heroPanel{background:linear-gradient(180deg,rgba(24,26,32,.92),rgba(15,19,26,.92));border:1px solid rgba(255,255,255,.08);border-radius:26px;padding:20px;box-shadow:var(--shadow)}.statRow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}.miniStat{background:#0b0e11;border:1px solid var(--line);border-radius:16px;padding:14px}.miniStat span{display:block;color:var(--sub);font-size:12px}.miniStat b{display:block;margin-top:7px;font-size:20px}.wrap{max-width:1180px;margin:auto;padding:18px}.notice{display:flex;align-items:center;gap:12px;background:linear-gradient(90deg,rgba(240,185,11,.15),rgba(240,185,11,.04));border:1px solid rgba(240,185,11,.22);padding:14px 16px;border-radius:18px;color:#ffe7a3;margin:12px 0 24px}.sectionTitle{display:flex;justify-content:space-between;align-items:end;margin:30px 0 16px}.sectionTitle h2{font-size:26px}.sectionTitle p{color:var(--sub);font-size:13px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:16px}.card{position:relative;overflow:hidden;background:linear-gradient(180deg,rgba(24,26,32,.98),rgba(12,15,21,.98));border:1px solid rgba(255,255,255,.08);padding:18px;border-radius:22px;box-shadow:0 10px 35px rgba(0,0,0,.24);transition:.25s}.card:hover{transform:translateY(-4px);border-color:rgba(240,185,11,.38)}.card:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(240,185,11,.08),transparent 42%);pointer-events:none}.pair{display:flex;justify-content:space-between;align-items:center;color:var(--sub);font-weight:800;font-size:13px}.coin{color:#fff;font-size:17px}.price{font-size:35px;font-weight:1000;margin:14px 0 5px;letter-spacing:-1px}.up{color:var(--green)}.down{color:var(--red)}.flat{color:var(--gold)}.meta{display:flex;justify-content:space-between;color:var(--sub);font-size:12px;margin-top:10px}.spark{height:64px;display:flex;align-items:flex-end;gap:5px;margin-top:16px}.bar{flex:1;border-radius:6px 6px 0 0;background:linear-gradient(180deg,var(--gold),rgba(240,185,11,.25));animation:pulse 2s infinite alternate}.card.downTrend .bar{background:linear-gradient(180deg,var(--red),rgba(246,70,93,.25))}.card.upTrend .bar{background:linear-gradient(180deg,var(--green),rgba(14,203,129,.25))}@keyframes pulse{to{opacity:.72;transform:scaleY(.92)}}.tools{display:grid;grid-template-columns:1fr .85fr;gap:16px}.box{background:linear-gradient(180deg,rgba(24,26,32,.96),rgba(12,15,21,.96));border:1px solid rgba(255,255,255,.08);padding:20px;border-radius:22px}.formGrid{display:grid;grid-template-columns:1fr 160px;gap:10px}input,select,textarea{width:100%;padding:14px;background:#080b10;color:#fff;border:1px solid var(--line);border-radius:13px;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--gold)}.result{margin-top:16px;font-size:34px;font-weight:1000;color:var(--gold)}.ad{display:none;border:1px dashed rgba(240,185,11,.45);background:rgba(240,185,11,.08);border-radius:22px;padding:22px;text-align:center;margin:18px 0}.ad.show{display:block}.contactGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.contact{padding:15px;border-radius:16px;background:#0b0e11;border:1px solid var(--line);font-weight:900;text-align:center}.contact:hover{border-color:var(--gold)}footer{text-align:center;color:var(--sub);padding:36px 18px;border-top:1px solid var(--line);margin-top:35px}.floatAdmin{position:fixed;right:18px;bottom:18px;z-index:120;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;border:none;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#000;font-size:24px;font-weight:1000;box-shadow:0 14px 35px rgba(240,185,11,.25)}.modalOverlay{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:200;padding:16px}.modalOverlay.show{display:flex}.modal{width:min(100%,420px);background:#11151d;border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:22px;box-shadow:var(--shadow)}.modal h3{font-size:24px;margin-bottom:12px}.modal .btn{width:100%;margin-top:10px}.adminPanel{width:min(100%,980px);max-height:88vh;overflow:auto}.adminGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.adminGrid label{font-size:12px;color:var(--sub);font-weight:800}.adminGrid .full{grid-column:1/-1}.toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(30px);background:#11151d;border:1px solid var(--line);color:#fff;padding:13px 18px;border-radius:99px;opacity:0;pointer-events:none;z-index:500;transition:.25s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.langPick{display:grid;gap:10px}.risk{color:var(--sub);font-size:12px;line-height:1.6;margin-top:12px}.mobileMenu{display:none}@media(max-width:760px){header{padding:13px 14px}.logo{font-size:18px}.nav .hideMob{display:none}.hero{grid-template-columns:1fr;padding:34px 16px 16px}.hero h1{letter-spacing:-1px}.tools{grid-template-columns:1fr}.formGrid{grid-template-columns:1fr}.statRow,.contactGrid,.adminGrid{grid-template-columns:1fr}.price{font-size:31px}.sectionTitle{align-items:start;flex-direction:column;gap:5px}.btn{padding:9px 10px}.wrap{padding:14px}.floatAdmin{right:14px;bottom:14px}}
 </style>
 </head>
 <body>
-
-<div id="langModal">
-<div class="modal">
-<h2>Select Language</h2>
-<button onclick="setLang('en')">English</button>
-<button onclick="setLang('zh')">中文</button>
-<button onclick="setLang('mm')">မြန်မာ</button>
-</div>
-</div>
-
+<div class="bgGlow"></div>
+<div class="topTicker"><div class="tickerTrack" id="tickerTrack"></div></div>
 <header>
-<div class="logo">Myanmar Rate</div>
-<div class="lang">
-<button onclick="setLang('en')">EN</button>
-<button onclick="setLang('zh')">中文</button>
-<button onclick="setLang('mm')">MM</button>
-</div>
+  <div class="brand"><div class="mark">MR</div><div><div class="logo">Myanmar Rate <span class="badge">v4.0 Ultimate</span></div><div style="color:var(--sub);font-size:12px" id="tagline">Black Market • Business Rates • MMK</div></div></div>
+  <div class="nav"><button class="btn ghost hideMob" onclick="scrollToId('markets')" data-i="navMarkets">Markets</button><button class="btn ghost hideMob" onclick="scrollToId('calculator')" data-i="navCalc">Calculator</button><button class="btn" onclick="openLang()">🌐</button><button class="btn gold" onclick="scrollToId('contact')" data-i="navContact">Contact</button></div>
 </header>
-
 <section class="hero">
-<h1 id="heroTitle">Myanmar Live Exchange Rates</h1>
-<p id="heroDesc">Premium Market Rates for Myanmar Traders</p>
+  <div><h1 data-i="heroTitle">Myanmar Live Exchange Rates</h1><p data-i="heroDesc">Professional black-market, business and trader reference rates for Myanmar. Built for mobile users, merchants and exchange operators.</p><div class="heroActions"><button class="btn gold" onclick="scrollToId('markets')" data-i="viewRates">View Live Rates</button><button class="btn" onclick="scrollToId('calculator')" data-i="useCalc">Use Calculator</button></div></div>
+  <div class="heroPanel"><div style="display:flex;justify-content:space-between;gap:12px"><div><b data-i="marketPulse">Market Pulse</b><p style="color:var(--sub);font-size:13px;margin-top:6px" id="lastUpdated">--</p></div><div class="flat" style="font-weight:1000">LIVE</div></div><div class="statRow"><div class="miniStat"><span>USD/MMK</span><b id="heroUsd">0</b></div><div class="miniStat"><span>USDT/MMK</span><b id="heroUsdt">0</b></div><div class="miniStat"><span>Pairs</span><b>5</b></div></div></div>
 </section>
-
-<div class="wrap">
-
-<div class="title" id="marketText">Markets</div>
-
-<div class="grid">
-
-<div class="card">
-<div class="pair">USD / MMK</div>
-<div class="price up" id="usd">4,210</div>
-<div class="change">+1.2%</div>
-<div class="chart">
-<div class="bar" style="height:25%"></div>
-<div class="bar" style="height:40%"></div>
-<div class="bar" style="height:50%"></div>
-<div class="bar" style="height:65%"></div>
-<div class="bar" style="height:80%"></div>
-</div>
-</div>
-
-<div class="card">
-<div class="pair">RMB / MMK</div>
-<div class="price up" id="rmb">610</div>
-<div class="change">+0.4%</div>
-<div class="chart">
-<div class="bar" style="height:20%"></div>
-<div class="bar" style="height:30%"></div>
-<div class="bar" style="height:45%"></div>
-<div class="bar" style="height:55%"></div>
-<div class="bar" style="height:65%"></div>
-</div>
-</div>
-
-<div class="card">
-<div class="pair">THB / MMK</div>
-<div class="price down" id="thb">115</div>
-<div class="change">-0.3%</div>
-<div class="chart">
-<div class="bar" style="height:80%"></div>
-<div class="bar" style="height:70%"></div>
-<div class="bar" style="height:60%"></div>
-<div class="bar" style="height:45%"></div>
-<div class="bar" style="height:30%"></div>
-</div>
-</div>
-
-</div>
-
-<div class="title" id="calcText">Calculator</div>
-
-<div class="calcBox">
-<div class="row">
-<input id="amount" type="number" placeholder="Enter Amount" oninput="calc()">
-<select id="currency" onchange="calc()">
-<option value="usd">USD</option>
-<option value="rmb">RMB</option>
-<option value="thb">THB</option>
-</select>
-</div>
-<div class="result" id="result">0 MMK</div>
-</div>
-
-</div>
-
-<div class="admin" onclick="admin()">⚙</div>
-
-<footer>© 2026 Myanmar Rate v2.0 PRO</footer>
-
+<main class="wrap">
+  <div class="notice"><b>📢</b><span id="noticeText">Commercial reference rates only. Contact us for business cooperation and advertising.</span></div>
+  <div class="ad" id="adTop"><h3 id="adTitle">Premium Advertising Space</h3><p id="adText">Your brand can appear here.</p></div>
+  <section id="markets"><div class="sectionTitle"><div><h2 data-i="marketsTitle">Market Rates</h2><p data-i="marketsSub">USD, RMB, THB, USDT and SGD against MMK</p></div><p id="autoText">Auto refresh simulation: ON</p></div><div class="grid" id="rateGrid"></div></section>
+  <section id="calculator"><div class="sectionTitle"><div><h2 data-i="calcTitle">MMK Calculator</h2><p data-i="calcSub">Enter foreign currency amount and convert to MMK instantly.</p></div></div><div class="tools"><div class="box"><div class="formGrid"><input id="amount" type="number" placeholder="Enter Amount" oninput="calc()"><select id="currency" onchange="calc()"></select></div><div class="result" id="result">0 MMK</div><p class="risk" data-i="risk">Rates are for market reference. Final trading price may vary by provider, location and time.</p></div><div class="box"><h3 data-i="quickInfo">Business Features</h3><p class="risk" data-i="quickInfoText">Admin editable rates, announcements, ad system, contacts, multi-language interface and future API-ready structure.</p></div></div></section>
+  <section id="contact"><div class="sectionTitle"><div><h2 data-i="contactTitle">Contact & Cooperation</h2><p data-i="contactSub">Exchange, advertising and brand cooperation.</p></div></div><div class="contactGrid"><a class="contact" id="tgBtn" target="_blank">Telegram</a><a class="contact" id="waBtn" target="_blank">WhatsApp</a></div></section>
+</main>
+<button class="floatAdmin" onclick="openAdminLogin()">⚙</button>
+<footer>© 2026 Myanmar Rate v4.0 Ultimate PRO MAX · myanmar-rate-v1.vercel.app</footer>
+<div class="modalOverlay" id="langModal"><div class="modal"><h3>Select Language</h3><div class="langPick"><button class="btn gold" onclick="setLang('en')">English</button><button class="btn gold" onclick="setLang('zh')">中文</button><button class="btn gold" onclick="setLang('mm')">မြန်မာ</button></div></div></div>
+<div class="modalOverlay" id="loginModal"><div class="modal"><h3>Admin Login</h3><input id="adminPass" type="password" placeholder="Password"><button class="btn gold" onclick="loginAdmin()">Login</button><button class="btn" onclick="closeModal('loginModal')">Cancel</button></div></div>
+<div class="modalOverlay" id="adminModal"><div class="modal adminPanel"><h3>Myanmar Rate Admin</h3><div class="adminGrid" id="adminForm"></div><button class="btn gold" onclick="saveAdmin()">Save All</button><button class="btn" onclick="restoreDefault()">Restore Default</button><button class="btn" onclick="closeModal('adminModal')">Close</button></div></div>
+<div class="toast" id="toast">Saved</div>
 <script>
-let rates={usd:4210,rmb:610,thb:115};
-
-function calc(){
-let a=parseFloat(document.getElementById("amount").value)||0;
-let c=document.getElementById("currency").value;
-document.getElementById("result").innerText=(a*rates[c]).toLocaleString()+" MMK";
-}
-
-function setLang(l){
-document.getElementById("langModal").style.display="none";
-
-if(l==="en"){
-heroTitle.innerText="Myanmar Live Exchange Rates";
-heroDesc.innerText="Premium Market Rates for Myanmar Traders";
-marketText.innerText="Markets";
-calcText.innerText="Calculator";
-}
-if(l==="zh"){
-heroTitle.innerText="缅甸实时汇率";
-heroDesc.innerText="专业缅甸市场交易汇率平台";
-marketText.innerText="市场行情";
-calcText.innerText="汇率计算器";
-}
-if(l==="mm"){
-heroTitle.innerText="မြန်မာ တိုက်ရိုက် ငွေလဲနှုန်း";
-heroDesc.innerText="ပရော်ဖက်ရှင်နယ် စျေးကွက်နှုန်းထား";
-marketText.innerText="စျေးကွက်";
-calcText.innerText="တွက်စက်";
-}
-}
-
-function admin(){
-let p=prompt("Password");
-if(p==="123456"){
-rates.usd=parseFloat(prompt("USD",rates.usd));
-rates.rmb=parseFloat(prompt("RMB",rates.rmb));
-rates.thb=parseFloat(prompt("THB",rates.thb));
-
-usd.innerText=rates.usd.toLocaleString();
-rmb.innerText=rates.rmb.toLocaleString();
-thb.innerText=rates.thb.toLocaleString();
-
-alert("Updated");
-}else{
-alert("Wrong Password");
-}
-}
-
-setInterval(()=>{
-rates.usd+=Math.floor(Math.random()*5)-2;
-rates.rmb+=Math.floor(Math.random()*3)-1;
-rates.thb+=Math.floor(Math.random()*3)-1;
-
-usd.innerText=rates.usd.toLocaleString();
-rmb.innerText=rates.rmb.toLocaleString();
-thb.innerText=rates.thb.toLocaleString();
-},5000);
+const KEY='myanmar_rate_v4_data';
+const defaultData={lang:'en',notice:'Commercial reference rates only. Contact us for business cooperation and advertising.',adEnabled:false,adTitle:'Premium Advertising Space',adText:'Your brand can appear here.',telegram:'https://t.me/',whatsapp:'https://wa.me/',rates:{usd:{name:'USD',full:'US Dollar',value:4210,change:1.2,trend:'up'},rmb:{name:'RMB',full:'Chinese Yuan',value:610,change:.4,trend:'up'},thb:{name:'THB',full:'Thai Baht',value:115,change:-.3,trend:'down'},usdt:{name:'USDT',full:'Tether',value:4235,change:.8,trend:'up'},sgd:{name:'SGD',full:'Singapore Dollar',value:3130,change:.2,trend:'up'}}};
+let data=load();
+const I={en:{navMarkets:'Markets',navCalc:'Calculator',navContact:'Contact',heroTitle:'Myanmar Live Exchange Rates',heroDesc:'Professional black-market, business and trader reference rates for Myanmar. Built for mobile users, merchants and exchange operators.',viewRates:'View Live Rates',useCalc:'Use Calculator',marketPulse:'Market Pulse',marketsTitle:'Market Rates',marketsSub:'USD, RMB, THB, USDT and SGD against MMK',calcTitle:'MMK Calculator',calcSub:'Enter foreign currency amount and convert to MMK instantly.',risk:'Rates are for market reference. Final trading price may vary by provider, location and time.',quickInfo:'Business Features',quickInfoText:'Admin editable rates, announcements, ad system, contacts, multi-language interface and future API-ready structure.',contactTitle:'Contact & Cooperation',contactSub:'Exchange, advertising and brand cooperation.'},zh:{navMarkets:'行情',navCalc:'计算器',navContact:'联系',heroTitle:'缅甸实时商业汇率平台',heroDesc:'面向缅甸市场的黑市汇率、民间汇率与商业参考汇率平台，适合商家、兑换商和交易用户。',viewRates:'查看汇率',useCalc:'使用计算器',marketPulse:'市场动态',marketsTitle:'市场汇率',marketsSub:'USD、RMB、THB、USDT、SGD 兑 MMK',calcTitle:'MMK 汇率计算器',calcSub:'输入外币金额，自动换算缅币。',risk:'汇率仅供市场参考，最终交易价格会因商家、地区和时间不同而变化。',quickInfo:'商业功能',quickInfoText:'支持后台修改汇率、公告、广告、联系方式、多语言，后续可接 API。',contactTitle:'联系与合作',contactSub:'兑换、广告投放、品牌合作。'},mm:{navMarkets:'စျေးကွက်',navCalc:'တွက်စက်',navContact:'ဆက်သွယ်ရန်',heroTitle:'မြန်မာ ငွေလဲနှုန်း Live Platform',heroDesc:'မြန်မာစျေးကွက်အတွက် black market၊ business နှင့် trader reference rates များကို professional ပုံစံဖြင့် ပြသသည်။',viewRates:'နှုန်းထားကြည့်ရန်',useCalc:'တွက်စက်သုံးရန်',marketPulse:'စျေးကွက်အခြေအနေ',marketsTitle:'ငွေလဲနှုန်းများ',marketsSub:'USD, RMB, THB, USDT, SGD to MMK',calcTitle:'MMK တွက်စက်',calcSub:'ငွေပမာဏထည့်ပြီး MMK သို့ ချက်ချင်းတွက်ပါ။',risk:'နှုန်းထားများသည် reference အတွက်သာ ဖြစ်ပြီး အမှန်တကယ်စျေးနှုန်းကွာနိုင်သည်။',quickInfo:'Business Features',quickInfoText:'Admin rate edit, announcement, ads, contacts, multi-language and future API ready.',contactTitle:'ဆက်သွယ်ရန်',contactSub:'Exchange, advertising and cooperation.'}};
+function load(){try{return {...defaultData,...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){return structuredClone(defaultData)}}function persist(){localStorage.setItem(KEY,JSON.stringify(data))}function fmt(n){return Number(n||0).toLocaleString('en-US')}function toast(t){let x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1800)}function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:'smooth'})}function openLang(){document.getElementById('langModal').classList.add('show')}function closeModal(id){document.getElementById(id).classList.remove('show')}function setLang(l){data.lang=l;persist();applyLang();closeModal('langModal');toast('Language saved')}function applyLang(){let d=I[data.lang]||I.en;document.querySelectorAll('[data-i]').forEach(el=>{el.textContent=d[el.dataset.i]||el.textContent});document.documentElement.lang=data.lang==='mm'?'my':data.lang}function render(){applyLang();document.getElementById('noticeText').textContent=data.notice;document.getElementById('adTitle').textContent=data.adTitle;document.getElementById('adText').textContent=data.adText;document.getElementById('adTop').classList.toggle('show',!!data.adEnabled);document.getElementById('tgBtn').href=data.telegram||'#';document.getElementById('waBtn').href=data.whatsapp||'#';let grid=document.getElementById('rateGrid');grid.innerHTML='';let sel=document.getElementById('currency');sel.innerHTML='';let tick='';Object.entries(data.rates).forEach(([k,r],i)=>{let cls=r.trend==='down'?'down':'up';let card=document.createElement('div');card.className='card '+(r.trend==='down'?'downTrend':'upTrend');card.innerHTML=`<div class="pair"><span class="coin">${r.name}/MMK</span><span>${r.full}</span></div><div class="price ${cls}" id="p_${k}">${fmt(r.value)}</div><div class="change ${cls}">${r.change>0?'+':''}${r.change}%</div><div class="spark">${[22,38,54,46,68,75,58,82].map((h,j)=>`<div class="bar" style="height:${Math.max(12,Math.min(95,h+(i*7)+(j%2?8:-5)))}%"></div>`).join('')}</div><div class="meta"><span>Commercial Rate</span><span>Auto Save</span></div>`;grid.appendChild(card);sel.innerHTML+=`<option value="${k}">${r.name}</option>`;tick+=`<span class="tickerItem"><b>${r.name}/MMK</b><span class="${cls}">${fmt(r.value)} ${r.change>0?'+':''}${r.change}%</span></span>`});document.getElementById('tickerTrack').innerHTML=tick+tick;document.getElementById('heroUsd').textContent=fmt(data.rates.usd.value);document.getElementById('heroUsdt').textContent=fmt(data.rates.usdt.value);document.getElementById('lastUpdated').textContent='Updated: '+new Date().toLocaleString();calc()}function calc(){let a=parseFloat(document.getElementById('amount').value)||0;let c=document.getElementById('currency').value||'usd';document.getElementById('result').textContent=fmt(a*(data.rates[c]?.value||0))+' MMK'}function openAdminLogin(){document.getElementById('adminPass').value='';document.getElementById('loginModal').classList.add('show')}function loginAdmin(){if(document.getElementById('adminPass').value==='123456'){closeModal('loginModal');buildAdmin();document.getElementById('adminModal').classList.add('show')}else toast('Wrong password')}function field(id,label,val,type='text',full=false){return `<div class="${full?'full':''}"><label>${label}</label><${type==='textarea'?'textarea':'input'} id="${id}" ${type==='number'?'type="number" step="0.01"':''}>${type==='textarea'?val:''}</${type==='textarea'?'textarea':'input'}></div>`}function buildAdmin(){let html='';Object.entries(data.rates).forEach(([k,r])=>{html+=field('rate_'+k,r.name+' Rate',r.value,'number')+field('chg_'+k,r.name+' Change %',r.change,'number')+`<div><label>${r.name} Trend</label><select id="trend_${k}"><option value="up">Up</option><option value="down">Down</option></select></div><div></div>`});html+=field('noticeAdmin','Announcement',data.notice,'textarea',true)+field('adTitleAdmin','Ad Title',data.adTitle,'text')+field('adTextAdmin','Ad Text',data.adText,'text')+`<div><label>Ad Enabled</label><select id="adEnabledAdmin"><option value="false">Hidden</option><option value="true">Show</option></select></div>`+field('telegramAdmin','Telegram Link',data.telegram,'text')+field('whatsappAdmin','WhatsApp Link',data.whatsapp,'text');document.getElementById('adminForm').innerHTML=html;Object.entries(data.rates).forEach(([k,r])=>document.getElementById('trend_'+k).value=r.trend);document.getElementById('adEnabledAdmin').value=String(!!data.adEnabled);Object.entries(data.rates).forEach(([k,r])=>{document.getElementById('rate_'+k).value=r.value;document.getElementById('chg_'+k).value=r.change});['noticeAdmin','adTitleAdmin','adTextAdmin','telegramAdmin','whatsappAdmin'].forEach(id=>{if(document.getElementById(id).tagName!=='TEXTAREA')document.getElementById(id).value=document.getElementById(id).textContent||''});document.getElementById('noticeAdmin').value=data.notice;document.getElementById('adTitleAdmin').value=data.adTitle;document.getElementById('adTextAdmin').value=data.adText;document.getElementById('telegramAdmin').value=data.telegram;document.getElementById('whatsappAdmin').value=data.whatsapp}function saveAdmin(){Object.keys(data.rates).forEach(k=>{data.rates[k].value=parseFloat(document.getElementById('rate_'+k).value)||0;data.rates[k].change=parseFloat(document.getElementById('chg_'+k).value)||0;data.rates[k].trend=document.getElementById('trend_'+k).value});data.notice=document.getElementById('noticeAdmin').value;data.adTitle=document.getElementById('adTitleAdmin').value;data.adText=document.getElementById('adTextAdmin').value;data.adEnabled=document.getElementById('adEnabledAdmin').value==='true';data.telegram=document.getElementById('telegramAdmin').value;data.whatsapp=document.getElementById('whatsappAdmin').value;persist();render();toast('Saved successfully')}function restoreDefault(){data=structuredClone(defaultData);persist();render();buildAdmin();toast('Default restored')}setInterval(()=>{Object.values(data.rates).forEach(r=>{let step=r.value>1000?Math.floor(Math.random()*7)-3:Math.random()-.5;r.value=Math.max(1,Math.round((r.value+step)*100)/100)});render();persist()},6000);if(!localStorage.getItem(KEY))setTimeout(openLang,500);render();
 </script>
-
 </body>
 </html>
