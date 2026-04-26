@@ -1,0 +1,19 @@
+{
+  "name": "Myanmar Rate",
+  "short_name": "Myanmar Rate",
+  "description": "USD, THB and RMB live exchange rates to MMK.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#07090d",
+  "theme_color": "#f0b90b",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
