@@ -1,4 +1,4 @@
-const { readData, json } = require('./_store');
+const { readData, json, normalizeData } = require('./_store');
 const { getSettings } = require('./_db');
 
 module.exports = async (req, res) => {
@@ -9,6 +9,8 @@ module.exports = async (req, res) => {
   if (!data) {
     data = readData();
   }
+
+  data = normalizeData(data);
 
   return json(res, 200, {
     ok: true,
