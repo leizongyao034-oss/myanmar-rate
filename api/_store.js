@@ -6,7 +6,7 @@ const DATA_FILE = path.join('/tmp', 'myanmar-rate-data.json');
 const defaultData = {
   lang: 'en',
   views: 0,
-  notice: 'Commercial reference rates only. Contact us for exchange cooperation, advertising and API partnership.',
+  notice: 'Commercial reference rates only. USD, THB and RMB reference rates against MMK.',
   adEnabled: false,
   sideAdEnabled: false,
   adTitle: 'Premium Banner Advertising',
@@ -21,24 +21,33 @@ const defaultData = {
   updatedAt: new Date().toISOString(),
   rates: {
     usd: { name: 'USD', full: 'US Dollar', value: 4210, change: 1.2, trend: 'up', spread: 25 },
-    rmb: { name: 'RMB', full: 'Chinese Yuan', value: 610, change: 0.4, trend: 'up', spread: 6 },
     thb: { name: 'THB', full: 'Thai Baht', value: 115, change: -0.3, trend: 'down', spread: 2 },
-    usdt: { name: 'USDT', full: 'Tether', value: 4235, change: 0.8, trend: 'up', spread: 30 },
-    sgd: { name: 'SGD', full: 'Singapore Dollar', value: 3130, change: 0.2, trend: 'up', spread: 20 }
+    rmb: { name: 'RMB', full: 'Chinese Yuan', value: 610, change: 0.4, trend: 'up', spread: 6 }
   }
 };
 
+function normalizeData(data) {
+  const next = { ...defaultData, ...data };
+  const rates = next.rates || {};
+  next.rates = {
+    usd: rates.usd || defaultData.rates.usd,
+    thb: rates.thb || defaultData.rates.thb,
+    rmb: rates.rmb || defaultData.rates.rmb
+  };
+  return next;
+}
+
 function readData() {
   try {
-    if (!fs.existsSync(DATA_FILE)) return { ...defaultData };
-    return { ...defaultData, ...JSON.parse(fs.readFileSync(DATA_FILE, 'utf8')) };
+    if (!fs.existsSync(DATA_FILE)) return normalizeData(defaultData);
+    return normalizeData(JSON.parse(fs.readFileSync(DATA_FILE, 'utf8')));
   } catch (e) {
-    return { ...defaultData };
+    return normalizeData(defaultData);
   }
 }
 
 function writeData(data) {
-  const next = { ...defaultData, ...data, updatedAt: new Date().toISOString() };
+  const next = normalizeData({ ...data, updatedAt: new Date().toISOString() });
   fs.writeFileSync(DATA_FILE, JSON.stringify(next, null, 2));
   return next;
 }
@@ -58,4 +67,4 @@ function requireAdmin(req) {
   return auth === `Bearer ${expected}`;
 }
 
-module.exports = { defaultData, readData, writeData, json, requireAdmin };
+module.exports = { defaultData, normalizeData, readData, writeData, json, requireAdmin };
