@@ -21,28 +21,46 @@ create table if not exists public.ad_clicks (
   created_at timestamptz not null default now()
 );
 
+create table if not exists public.users (
+  id bigserial primary key,
+  name text,
+  email text unique not null,
+  password_hash text not null,
+  plan text not null default 'free',
+  api_key text unique,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.api_usage (
+  id bigserial primary key,
+  api_key text,
+  endpoint text not null,
+  ip text,
+  created_at timestamptz not null default now()
+);
+
 insert into public.settings (id, data)
 values ('main', '{
-  "lang":"en",
+  "lang":"",
   "views":0,
-  "notice":"Commercial reference rates only. Contact us for exchange cooperation, advertising and API partnership.",
+  "notice":"Commercial reference rates only. USD, THB and RMB reference rates against MMK.",
   "adEnabled":false,
   "sideAdEnabled":false,
   "adTitle":"Premium Banner Advertising",
   "adText":"Advertise your exchange, brand or payment service here.",
   "sideAdTitle":"Brand Cooperation",
   "sideAdText":"Sponsor this market section.",
-  "telegram":"https://t.me/",
-  "whatsapp":"https://wa.me/",
-  "email":"business@myanmar-rate.com",
+  "telegram":"",
+  "whatsapp":"",
+  "email":"",
   "apiEnabled":true,
   "apiUrl":"/api/rates",
+  "registerEnabled":true,
+  "showBuySell":true,
   "rates":{
     "usd":{"name":"USD","full":"US Dollar","value":4210,"change":1.2,"trend":"up","spread":25},
-    "rmb":{"name":"RMB","full":"Chinese Yuan","value":610,"change":0.4,"trend":"up","spread":6},
     "thb":{"name":"THB","full":"Thai Baht","value":115,"change":-0.3,"trend":"down","spread":2},
-    "usdt":{"name":"USDT","full":"Tether","value":4235,"change":0.8,"trend":"up","spread":30},
-    "sgd":{"name":"SGD","full":"Singapore Dollar","value":3130,"change":0.2,"trend":"up","spread":20}
+    "rmb":{"name":"RMB","full":"Chinese Yuan","value":610,"change":0.4,"trend":"up","spread":6}
   }
 }'::jsonb)
-on conflict (id) do nothing;
+on conflict (id) do update set data = excluded.data;
