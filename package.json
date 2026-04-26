@@ -1,9 +1,9 @@
 {
   "name": "myanmar-rate",
-  "version": "6.5.1",
+  "version": "6.5.2",
   "private": true,
   "description": "Myanmar Rate commercial exchange platform with Supabase REST backend",
   "scripts": {
-    "build": "echo Static Vercel deployment ready"
+    "build": "mkdir -p public && cp index.html admin.html app.js public/"
   }
 }
