@@ -1,4 +1,13 @@
-async function fetchLiveRates() {
+function num(v, fallback) {
+  const n = Number(v);
+  return Number.isFinite(n) && n > 0 ? n : fallback;
+}
+
+function roundTo(v, step) {
+  return Math.round(v / step) * step;
+}
+
+async function fetchLiveRates(settings = {}) {
   const url = process.env.EXCHANGE_API_URL || 'https://open.er-api.com/v6/latest/MMK';
   const res = await fetch(url, { headers: { accept: 'application/json' } });
   if (!res.ok) throw new Error('Live rate provider failed');
@@ -10,18 +19,19 @@ async function fetchLiveRates() {
   const officialThb = 1 / r.THB;
   const officialCny = 1 / r.CNY;
 
-  const usdMultiplier = Number(process.env.USD_MARKET_MULTIPLIER || 2.0);
-  const thbMultiplier = Number(process.env.THB_MARKET_MULTIPLIER || 2.0);
-  const cnyMultiplier = Number(process.env.CNY_MARKET_MULTIPLIER || 2.0);
+  const anchorUsd = num(settings.blackMarketUsd || process.env.BLACK_MARKET_USD, 4210);
+  const anchorThb = num(settings.blackMarketThb || process.env.BLACK_MARKET_THB, 115);
+  const anchorRmb = num(settings.blackMarketRmb || process.env.BLACK_MARKET_RMB, 610);
 
-  const usd = officialUsd * usdMultiplier;
-  const thb = officialThb * thbMultiplier;
-  const cny = officialCny * cnyMultiplier;
+  const marketRatio = anchorUsd / officialUsd;
+  const usd = anchorUsd;
+  const thb = settings.blackMarketThb ? anchorThb : officialThb * marketRatio;
+  const rmb = settings.blackMarketRmb ? anchorRmb : officialCny * marketRatio;
 
   return {
-    usd: { name: 'USD', full: 'US Dollar', value: Math.round(usd), change: 0, trend: 'up', spread: 25 },
-    thb: { name: 'THB', full: 'Thai Baht', value: Math.round(thb), change: 0, trend: 'up', spread: 2 },
-    rmb: { name: 'RMB', full: 'Chinese Yuan', value: Math.round(cny), change: 0, trend: 'up', spread: 6 }
+    usd: { name: 'USD', full: 'US Dollar', value: roundTo(usd, 5), change: 0, trend: 'up', spread: 25 },
+    thb: { name: 'THB', full: 'Thai Baht', value: roundTo(thb, 1), change: 0, trend: 'up', spread: 2 },
+    rmb: { name: 'RMB', full: 'Chinese Yuan', value: roundTo(rmb, 1), change: 0, trend: 'up', spread: 6 }
   };
 }
 
