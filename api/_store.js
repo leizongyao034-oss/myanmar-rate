@@ -4,7 +4,7 @@ const path = require('path');
 const DATA_FILE = path.join('/tmp', 'myanmar-rate-data.json');
 
 const defaultData = {
-  lang: 'en',
+  lang: '',
   views: 0,
   notice: 'Commercial reference rates only. USD, THB and RMB reference rates against MMK.',
   adEnabled: false,
@@ -13,11 +13,13 @@ const defaultData = {
   adText: 'Advertise your exchange, brand or payment service here.',
   sideAdTitle: 'Brand Cooperation',
   sideAdText: 'Sponsor this market section.',
-  telegram: 'https://t.me/',
-  whatsapp: 'https://wa.me/',
-  email: 'business@myanmar-rate.com',
+  telegram: '',
+  whatsapp: '',
+  email: '',
   apiEnabled: true,
   apiUrl: '/api/rates',
+  registerEnabled: true,
+  showBuySell: true,
   updatedAt: new Date().toISOString(),
   rates: {
     usd: { name: 'USD', full: 'US Dollar', value: 4210, change: 1.2, trend: 'up', spread: 25 },
@@ -28,6 +30,13 @@ const defaultData = {
 
 function normalizeData(data) {
   const next = { ...defaultData, ...data };
+  next.adEnabled = false;
+  next.sideAdEnabled = false;
+  next.telegram = next.telegram || '';
+  next.whatsapp = next.whatsapp || '';
+  next.email = next.email || '';
+  next.registerEnabled = true;
+  next.showBuySell = true;
   const rates = next.rates || {};
   next.rates = {
     usd: rates.usd || defaultData.rates.usd,
