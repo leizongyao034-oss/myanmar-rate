@@ -1,4 +1,4 @@
-const { readData, writeData, json, requireAdmin } = require('./_store');
+const { readData, writeData, json, requireAdmin, normalizeData } = require('./_store');
 const { getSettings, saveSettings } = require('./_db');
 
 function readBody(req) {
@@ -20,16 +20,16 @@ module.exports = async (req, res) => {
 
   if (req.method === 'GET') {
     const dbData = await getSettings();
-    const data = dbData || readData();
+    const data = normalizeData(dbData || readData());
     return json(res, 200, { ok: true, source: dbData ? 'supabase' : 'fallback', data });
   }
 
   if (req.method === 'POST') {
     try {
-      const body = await readBody(req);
+      const body = normalizeData(await readBody(req));
       let next = await saveSettings(body);
       if (!next) next = writeData(body);
-      return json(res, 200, { ok: true, data: next });
+      return json(res, 200, { ok: true, data: normalizeData(next) });
     } catch (e) {
       return json(res, 400, { ok: false, error: e.message || 'Bad Request' });
     }
